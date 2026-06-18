@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>All Listings</title>
+</head>
+<body>
+    <h1>All Homestays 🏡</h1>
+
+    <% listings.forEach(listing => { %>
+        <div>
+            <h2><%= listing.title %></h2>
+            <p>📍 <%= listing.location %></p>
+            <p>💰 ₹<%= listing.price %></p>
+            <hr>
+        </div>
+    <% }) %>
+
+</body>
+</html>
