@@ -1,19 +1,24 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>All Listings</title>
+    <title>HomeStay</title>
+    <link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
-    <h1>All Homestays 🏡</h1>
 
-    <% listings.forEach(listing => { %>
-        <div>
-            <h2><%= listing.title %></h2>
-            <p>📍 <%= listing.location %></p>
-            <p>💰 ₹<%= listing.price %></p>
-            <hr>
-        </div>
-    <% }) %>
+<h1>🏡 HomeStay Listings</h1>
+
+<a href="/listings/new">➕ Add New Listing</a>
+
+<% listings.forEach(listing => { %>
+    <div class="card">
+        <h2><%= listing.title %></h2>
+        <p>📍 <%= listing.location %></p>
+        <p>💰 ₹<%= listing.price %></p>
+
+        <a href="/listings/<%= listing._id %>">View</a>
+    </div>
+<% }) %>
 
 </body>
 </html>

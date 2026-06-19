@@ -1,0 +1,72 @@
+<% layout("layouts/boilerplate") %>
+
+<div class="login-page">
+    <!-- Left Side - Image -->
+    <div class="login-image-side">
+        <img src="https://i.pinimg.com/originals/1d/b3/ca/1db3cacfa37a309ecd2533fdad5b7b5a.jpg" alt="Stay" />
+        <div class="login-image-overlay">
+            <h2>Your next adventure is just one stay away</h2>
+            <p>Join thousands of travelers discovering unique places.</p>
+        </div>
+    </div>
+
+    <!-- Right Side - Form -->
+    <div class="login-form-side">
+        <div class="login-form-container">
+            
+            <a href="/listings" class="login-logo">
+                <i class="fa-solid fa-mountain-city"></i>
+                StayYaar
+            </a>
+
+            <h2 class="login-title">Create account</h2>
+            <p class="login-subtitle">Sign up to start your journey</p>
+
+            <form action="/signup" method="post" class="needs-validation" novalidate>
+                <div class="login-input-group">
+                    <label for="username">Username</label>
+                    <div class="login-input-wrapper">
+                        <i class="fa-solid fa-user"></i>
+                        <input
+                            type="text"
+                            name="username"
+                            id="username"
+                            placeholder="Choose a username"
+                            required />
+                    </div>
+                </div>
+
+                <div class="login-input-group">
+                    <label for="email">Email</label>
+                    <div class="login-input-wrapper">
+                        <i class="fa-solid fa-envelope"></i>
+                        <input
+                            type="email"
+                            name="email"
+                            id="email"
+                            placeholder="Enter your email"
+                            required />
+                    </div>
+                </div>
+
+                <div class="login-input-group">
+                    <label for="password">Password</label>
+                    <div class="login-input-wrapper">
+                        <i class="fa-solid fa-lock"></i>
+                        <input
+                            type="password"
+                            name="password"
+                            id="password"
+                            placeholder="Create a password"
+                            required />
+                    </div>
+                </div>
+
+                <button type="submit" class="login-btn">Sign Up</button>
+
+                <p class="login-signup-link">
+                    Already have an account? <a href="/login">Login</a>
+                </p>
+            </form>
+        </div>
+    </div>

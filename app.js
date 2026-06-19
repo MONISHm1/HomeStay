@@ -1,28 +1,37 @@
 const express = require("express");
-const path = require("path");
 const mongoose = require("mongoose");
-
+const path = require("path");
+const methodOverride = require("method-override");
 
 const app = express();
-const PORT = 3000;
 
+// DB Connection
+mongoose.connect("mongodb://127.0.0.1:27017/homestay")
+.then(() => console.log("DB Connected"))
+.catch(err => console.log(err));
 
+// Middleware
+app.use(express.urlencoded({ extended: true }));
+app.use(methodOverride("_method"));
+app.use(express.static(path.join(__dirname, "public")));
+
+// EJS Setup
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
 
-app.use(express.static(path.join(__dirname, "public")));
-app.use(express.urlencoded({ extended: true }));
+// Routes
+const listingRoutes = require("./routes/listing");
+app.use("/listings", listingRoutes);
 
-
+// Home Route
 app.get("/", (req, res) => {
-    res.sendFile(path.join(__dirname, "views", "index.html"));
+    res.redirect("/listings");
 });
 
+const userRoutes = require("./routes/user");
+app.use("/", userRoutes);
 
-
-mongoose.connect("mongodb://127.0.0.1:27017/stayyaar")
-.then(() => console.log("DB Connected"))
-.catch(err => console.log(err));
-app.listen(PORT, () => {
-    console.log(`Server running on http://localhost:${PORT}`);
+// Server
+app.listen(3000, () => {
+    console.log("Server running on http://localhost:3000");
 });
