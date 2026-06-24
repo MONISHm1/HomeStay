@@ -27,6 +27,8 @@ app.use("/listings", listingRoutes);
 app.get("/", (req, res) => {
     res.redirect("/listings");
 });
+const reviewRoutes = require("./routes/review");
+app.use("/listings/:id/reviews", reviewRoutes);
 
 const userRoutes = require("./routes/user");
 app.use("/", userRoutes);
