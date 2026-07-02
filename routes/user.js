@@ -1,39 +1,25 @@
 const express = require("express");
-const router = express.Router();
+const router = express.Router({ mergeParams: true });
+const wrapAsync = require("../utils/wrapAsync.js");
 const passport = require("passport");
-const User = require("../models/user");
+const { saveRedirectUrl } = require("../utils/middleware.js");
+const userController = require("../controllers/user.js");
 
-// SIGNUP FORM
-router.get("/signup", (req, res) => {
-    res.render("users/signup");
-});
 
-// SIGNUP LOGIC
-router.post("/signup", async (req, res) => {
-    const { username, password } = req.body;
+router.route("/signup")
+    .get(userController.signupUserForm)
+    .post(wrapAsync(userController.saveSignupUser));
 
-    const newUser = new User({ username });
-    await User.register(newUser, password);
 
-    res.redirect("/login");
-});
+router.route("/login")
+    .get(userController.loginUserForm)
+    .post(
+        saveRedirectUrl,
+        passport.authenticate("local", { failureRedirect: "/login", failureFlash: true ,failureMessage: false }),
+        userController.saveLoginUser,
+    );
 
-// LOGIN FORM
-router.get("/login", (req, res) => {
-    res.render("users/login");
-});
 
-// LOGIN LOGIC
-router.post("/login", passport.authenticate("local", {
-    successRedirect: "/listings",
-    failureRedirect: "/login"
-}));
-
-// LOGOUT
-router.get("/logout", (req, res) => {
-    req.logout(() => {
-        res.redirect("/listings");
-    });
-});
+router.get("/logout", userController.logoutUser);
 
 module.exports = router;

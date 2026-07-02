@@ -1,47 +1,59 @@
 const express = require("express");
 const router = express.Router();
-const Listing = require("../models/listing");
+const Listing = require("../models/listing.js");
+exports.router = router;
+const wrapAsync = require("../utils/wrapAsync.js");
+const { isLoggedIn, isOwner, validateListing } = require("../utils/middleware.js");
+const listingController = require("../controllers/listing.js");
+const multer = require("multer"); 
+const { storage } = require("../cloudConfig.js");
+const upload = multer({
+    storage,
+    fileFilter: (req, file, cb) => {
+        if (!file.mimetype.startsWith("image/")) {
+            return cb(new Error("Only images allowed"), false);
+        }
+        cb(null, true);
+    },
+    limits: { fileSize: 10 * 1024 * 1024 }
+}); 
 
-// INDEX - show all listings
-router.get("/", async (req, res) => {
-    const listings = await Listing.find({});
-    res.render("listings/index", { listings });
-});
 
-// NEW - form page
-router.get("/new", (req, res) => {
-    res.render("listings/new");
-});
+router.get("/new", isLoggedIn, listingController.newListingForm);
 
-// CREATE
-router.post("/", async (req, res) => {
-    const newListing = new Listing(req.body);
-    await newListing.save();
-    res.redirect("/listings");
-});
 
-// SHOW
-router.get("/:id", async (req, res) => {
+router.get("/:id/edit", isLoggedIn, isOwner, wrapAsync(listingController.editListingForm));
+
+router
+    .route("/")
+    .get(wrapAsync(listingController.index)) 
+    .post(
+        isLoggedIn,
+        upload.single("listing[image]"),
+        validateListing,
+        wrapAsync(listingController.saveNewListing),
+    );
+
+router
+    .route("/:id")
+    .get(wrapAsync(listingController.showListingDetails)) 
+    .put(
+        isLoggedIn,
+        isOwner,
+        upload.single("listing[image]"),
+        validateListing,
+        wrapAsync(listingController.updateListing),
+    ) 
+    .delete(isLoggedIn, isOwner, wrapAsync(listingController.deleteListing)); 
+
+
+
+    
+router.post("/:id/reserve", isLoggedIn, wrapAsync(async (req, res) => {
     const listing = await Listing.findById(req.params.id);
-    res.render("listings/show", { listing });
-});
-
-// EDIT
-router.get("/:id/edit", async (req, res) => {
-    const listing = await Listing.findById(req.params.id);
-    res.render("listings/edit", { listing });
-});
-
-// UPDATE
-router.put("/:id", async (req, res) => {
-    await Listing.findByIdAndUpdate(req.params.id, req.body);
+    req.flash("success", `🎉 Booking confirmed for "${listing.title}"! The host will contact you shortly.`);
     res.redirect(`/listings/${req.params.id}`);
-});
+}));
 
-// DELETE
-router.delete("/:id", async (req, res) => {
-    await Listing.findByIdAndDelete(req.params.id);
-    res.redirect("/listings");
-});
-
+module.exports = router;
 module.exports = router;

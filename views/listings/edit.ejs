@@ -1,19 +1,21 @@
 <% layout("layouts/boilerplate") %>
 
 <body>
-    <a href="/listings"><button class="btn btn-secondary mt-2">Back</button></a>
+    <a href="/listings/<%= listing._id %>">
+        <button class="btn btn-secondary mt-2">Back</button>
+    </a>
 
     <div class="row">
         <div class="col-10 offset-1">
-            <div class="border border-secondary border-2 rounded-3 mx-5 my-4 p-5 bg-light">
-                <h3 class="mb-4 fw-bold">Create New Listing</h3>
+            <div class="border border-dark border-2 rounded-2 mx-5 my-4 p-5 bg-light">
+                <h3 class="mb-4 fw-bold">Edit your Listing</h3>
 
                 <form
-                    action="/listings"
+                    action="/listings/<%= listing._id %>?_method=PUT"
                     method="post"
                     class="needs-validation"
-                    novalidate
-                    enctype="multipart/form-data">
+                    enctype="multipart/form-data"
+                    novalidate>
 
                     <!-- Title -->
                     <div class="mb-4">
@@ -22,7 +24,7 @@
                             type="text"
                             name="listing[title]"
                             id="title"
-                            placeholder="Give title to your place"
+                            value="<%= listing.title %>"
                             class="form-control border border-2 border-secondary-subtle"
                             required />
                         <div class="invalid-feedback">Title required!</div>
@@ -34,45 +36,55 @@
                         <textarea
                             name="listing[description]"
                             id="description"
-                            placeholder="Short description of your place"
                             class="form-control border border-2 border-secondary-subtle"
-                            required></textarea>
+                            required><%= listing.description %></textarea>
                         <div class="invalid-feedback">Enter short description!</div>
                     </div>
 
-                    <!-- Category -->
+                    <!-- Category (🔥 FIX ADDED HERE) -->
                     <div class="mb-4">
                         <label for="category" class="form-label fw-bold">Category</label>
                         <select
                             name="listing[category]"
                             id="category"
-                            class="form-control border border-2 border-secondary-subtle"
+                            class="form-select border border-2 border-secondary-subtle"
                             required>
-                            
+
                             <option value="">Select Category</option>
-                            <option value="Amazing Views">Amazing Views</option>
-                            <option value="Trending">Trending</option>
-                            <option value="Bed & Breakfasts">Bed & Breakfasts</option>
-                            <option value="Arctic">Arctic</option>
-                            <option value="Camping">Camping</option>
-                            <option value="Amazing Pools">Amazing Pools</option>
-                            <option value="Castles">Castles</option>
+
+                            <option value="Amazing Views" <%= listing.category === "Amazing Views" ? "selected" : "" %>>Amazing Views</option>
+                            <option value="Trending" <%= listing.category === "Trending" ? "selected" : "" %>>Trending</option>
+                            <option value="Bed & Breakfasts" <%= listing.category === "Bed & Breakfasts" ? "selected" : "" %>>Bed & Breakfasts</option>
+                            <option value="Arctic" <%= listing.category === "Arctic" ? "selected" : "" %>>Arctic</option>
+                            <option value="Camping" <%= listing.category === "Camping" ? "selected" : "" %>>Camping</option>
+                            <option value="Amazing Pools" <%= listing.category === "Amazing Pools" ? "selected" : "" %>>Amazing Pools</option>
+                            <option value="Castles" <%= listing.category === "Castles" ? "selected" : "" %>>Castles</option>
+
                         </select>
-                        <div class="invalid-feedback">Please select a category!</div>
+
+                        <div class="invalid-feedback">Please select a category.</div>
                     </div>
 
-                    <!-- Image Upload -->
-                    <div class="mb-4">
-                        <label for="image" class="form-label fw-bold">Upload Listing Image</label>
+                    <!-- Current Image -->
+                    <div class="col-10 offset-1 mb-4">
+                        <label class="form-label fw-bold">Current Image</label>
+                        <img
+                            src="<%= previewImage %>"
+                            class="card-img-top object-fit-cover show-img"
+                            alt="Listing Image" />
+                    </div>
+
+                    <!-- Upload New Image -->
+                    <div class="col-10 offset-1 mb-4">
+                        <label for="image" class="form-label fw-bold">Upload New Image</label>
                         <input
                             type="file"
                             name="listing[image]"
                             id="image"
-                            class="form-control border border-2 border-secondary-subtle"
-                            required />
+                            class="form-control border border-2 border-secondary-subtle" />
                     </div>
 
-                    <!-- Price & Country -->
+                    <!-- Price + Country -->
                     <div class="row">
                         <div class="mb-4 col-md-4">
                             <label for="price" class="form-label fw-bold">Price</label>
@@ -80,7 +92,7 @@
                                 type="number"
                                 name="listing[price]"
                                 id="price"
-                                placeholder="1500"
+                                value="<%= listing.price %>"
                                 class="form-control border border-2 border-secondary-subtle"
                                 required />
                             <div class="invalid-feedback">Enter valid price!</div>
@@ -92,7 +104,7 @@
                                 type="text"
                                 name="listing[country]"
                                 id="country"
-                                placeholder="India"
+                                value="<%= listing.country %>"
                                 class="form-control border border-2 border-secondary-subtle"
                                 required />
                             <div class="invalid-feedback">Enter valid country name!</div>
@@ -106,15 +118,15 @@
                             type="text"
                             name="listing[location]"
                             id="location"
-                            placeholder="Mumbai, India"
+                            value="<%= listing.location %>"
                             class="form-control border border-2 border-secondary-subtle"
                             required />
                         <div class="invalid-feedback">Enter valid location!</div>
                     </div>
 
                     <!-- Submit -->
-                    <button class="btn btn-primary w-100 fw-bold border-0 add-new-listing-btn">
-                        Add
+                    <button class="btn btn-dark w-100 fw-bold border-0 edit-listing-btn">
+                        Edit
                     </button>
 
                 </form>
