@@ -112,7 +112,7 @@ async function checkImages() {
       });
     });
   }
-  
+  console.log("Done.");
 }
 
 checkImages();

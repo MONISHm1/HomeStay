@@ -10,11 +10,15 @@ async function fetchImages() {
     
     const data = await new Promise((resolve) => {
       https.get(url, { headers: { "Accept-Version": "v1" } }, (res) => {
+        let body = "";
         res.on("data", (chunk) => (body += chunk));
         res.on("end", () => resolve(JSON.parse(body)));
       });
     });
 
+    data.results.forEach((photo) => {
+      allUrls.push(`"${photo.urls.regular}"`);
+    });
   }
 
   console.log("const placeImages = [");
