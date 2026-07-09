@@ -4,6 +4,7 @@ const wrapAsync = require("../utils/wrapAsync.js");
 const passport = require("passport");
 const { saveRedirectUrl } = require("../utils/middleware.js");
 const userController = require("../controllers/user.js");
+const { isLoggedIn } = require("../utils/middleware");
 
 
 router.route("/signup")
@@ -19,6 +20,12 @@ router.route("/login")
         userController.saveLoginUser,
     );
 
+
+router.get(
+    "/profile",
+    isLoggedIn,
+    wrapAsync(userController.profile)
+);
 
 router.get("/logout", userController.logoutUser);
 

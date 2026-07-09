@@ -1,0 +1,115 @@
+<% layout("layouts/boilerplate") %>
+
+<link rel="stylesheet" href="/css/profile.css">
+
+<div class="profile-container">
+
+    <div class="profile-card">
+
+        <div class="profile-avatar">
+
+            <%= user.username.charAt(0).toUpperCase() %>
+
+        </div>
+
+        <h2>
+
+            <%= user.username %>
+
+        </h2>
+
+        <p>
+
+            <%= user.email %>
+
+        </p>
+
+        <small>
+
+            Member since
+
+            <%= user.createdAt.toDateString() %>
+
+        </small>
+
+    </div>
+
+    <div class="profile-stats">
+
+        <div class="stat-card">
+
+            <h3>
+
+                <%= totalListings %>
+
+            </h3>
+
+            <p>Total Listings</p>
+
+        </div>
+
+        <div class="stat-card">
+
+            <h3>
+
+                <%= totalReviews %>
+
+            </h3>
+
+            <p>Total Reviews</p>
+
+        </div>
+
+    </div>
+
+    <h3 class="mt-5">
+
+        My Listings
+
+    </h3>
+
+    <div class="row">
+
+        <% listings.forEach(listing=>{ %>
+
+        <div class="col-md-4">
+
+            <a href="/listings/<%= listing._id %>" class="listing-link">
+
+                <div class="card">
+
+                    <img
+
+                    src="<%= listing.image.url %>"
+
+                    class="card-img-top"
+
+                    style="height:220px;object-fit:cover;">
+
+                    <div class="card-body">
+
+                        <h5>
+
+                            <%= listing.title %>
+
+                        </h5>
+
+                        <p>
+
+                            ₹<%= listing.price.toLocaleString("en-IN") %>
+
+                        </p>
+
+                    </div>
+
+                </div>
+
+            </a>
+
+        </div>
+
+        <% }) %>
+
+    </div>
+
+</div>

@@ -46,3 +46,32 @@ document.querySelectorAll(".wishlist-icon").forEach((icon) => {
         }
     });
 });
+
+
+const profileBtn = document.getElementById("profileBtn");
+
+const profileDropdown = document.getElementById("profileDropdown");
+
+if(profileBtn){
+
+    profileBtn.addEventListener("click",(e)=>{
+
+        e.stopPropagation();
+
+        profileDropdown.classList.toggle("active");
+
+    });
+
+    document.addEventListener("click",()=>{
+
+        profileDropdown.classList.remove("active");
+
+    });
+
+    profileDropdown.addEventListener("click",(e)=>{
+
+        e.stopPropagation();
+
+    });
+
+}

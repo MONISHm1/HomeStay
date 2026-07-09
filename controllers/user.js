@@ -1,4 +1,5 @@
 const User = require("../models/user.js");
+const Listing = require("../models/listing.js"); 
 
 
 module.exports.signupUserForm = (req, res) => {
@@ -42,5 +43,42 @@ module.exports.logoutUser = (req, res, next) => {
         if (error) return next(error);
         req.flash("success", "Logout successful.");
         res.redirect("/listings");
+    });
+};
+
+
+
+module.exports.profile = async (req, res) => {
+   
+    const user = await User.findById(req.user._id);
+    const listings = await Listing.find({
+        owner: user._id,
+    });
+    const totalListings = listings.length;
+    let totalReviews = 0;
+    let totalRating = 0;
+
+    listings.forEach((listing) => {
+        totalReviews += listing.reviews.length;
+    });
+    for (let listing of listings) {
+        await listing.populate("reviews");
+
+        listing.reviews.forEach((review) => {
+            totalRating += review.rating;
+        });
+    }
+
+    const averageRating =
+        totalReviews > 0
+            ? (totalRating / totalReviews).toFixed(1)
+            : 0;
+
+    res.render("users/profile.ejs", {
+        user,
+        listings,
+        totalListings,
+        totalReviews,
+        averageRating,
     });
 };

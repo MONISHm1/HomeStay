@@ -1,6 +1,7 @@
 <nav class="navbar navbar-expand-lg bg-white border-bottom sticky-top">
     <div class="container-fluid px-4">
 
+        <!-- Logo -->
         <a class="navbar-brand logo" href="/listings">
             <div class="logo-badge">
                 <i class="fa-solid fa-mountain-city"></i>
@@ -8,6 +9,7 @@
             <span class="logo-text">HomeStay</span>
         </a>
 
+        <!-- Mobile Toggle -->
         <button
             class="navbar-toggler"
             type="button"
@@ -15,17 +17,17 @@
             data-bs-target="#navbarNav">
 
             <span class="navbar-toggler-icon"></span>
+
         </button>
 
         <div class="collapse navbar-collapse" id="navbarNav">
 
-           
+            <!-- Search -->
             <form
                 action="/listings"
                 method="GET"
                 class="d-flex mx-auto search-form">
 
-                
                 <input
                     class="form-control search-box"
                     type="search"
@@ -33,47 +35,114 @@
                     placeholder="Search destinations, country, category..."
                     value="<%= typeof search !== 'undefined' ? search : '' %>">
 
-               
                 <button
                     type="submit"
                     class="search-btn ms-2">
+
                     <i class="fa-solid fa-magnifying-glass"></i>
                     Search
+
                 </button>
+
             </form>
 
+            <!-- Right Side -->
             <div class="navbar-nav fw-bold ms-auto align-items-center">
 
-                <% if(currentUser){ %>
-                    <div class="user-profile">
-                        <div class="avatar">
-                            <%= currentUser.username.charAt(0).toUpperCase() %>
-                        </div>
+                <!-- Add Listing -->
+                <a class="nav-link me-2" href="/listings/new">
+                    Add Your Home
+                </a>
 
-                        <span>
-                            <%= currentUser.username %>
-                        </span>
-                    </div>
-                <% } %>
+                <% if(!currentUser){ %>
 
-                <a class="nav-link" href="/listings/new">Add Your Home</a>
+                    <a class="nav-link" href="/login">
+                        Login
+                    </a>
 
-                <% if (!currentUser) { %>
-
-                    <a class="nav-link" href="/login">Loginn</a>
-
-                    <a class="nav-link" href="/signup">Sign Up</a>
+                    <a class="nav-link" href="/signup">
+                        Sign Up
+                    </a>
 
                 <% } else { %>
 
-                    <a class="nav-link logout-btn" href="/logout">
-                        Log Out
-                    </a>
+                    <!-- Profile Dropdown -->
+                    <div class="profile-wrapper">
+
+                        <button
+                            id="profileBtn"
+                            class="user-profile-btn">
+
+                            <div class="avatar">
+                                <%= currentUser.username.charAt(0).toUpperCase() %>
+                            </div>
+
+                            <span class="profile-name">
+                                <%= currentUser.username %>
+                            </span>
+
+                            <i class="fa-solid fa-chevron-down profile-arrow"></i>
+
+                        </button>
+
+                        <!-- Dropdown -->
+                        <div
+                            id="profileDropdown"
+                            class="profile-dropdown">
+
+                            <div class="dropdown-header">
+
+    <div class="dropdown-avatar">
+        <%= currentUser.username.charAt(0).toUpperCase() %>
+    </div>
+
+    <div class="dropdown-user-info">
+
+        <h5 class="dropdown-username">
+            <%= currentUser.username %>
+        </h5>
+
+        <p class="dropdown-email">
+            <i class="fa-solid fa-envelope"></i>
+            <%= currentUser.email %>
+        </p>
+
+        <span class="dropdown-badge">
+            HomeStay Member
+        </span>
+
+    </div>
+
+</div>
+
+                            <hr>
+
+                            <a href="/profile">
+                                <i class="fa-solid fa-user"></i>
+                                My Profile
+                            </a>
+
+                            <a href="/listings/new">
+                                <i class="fa-solid fa-house"></i>
+                                Add New Listing
+                            </a>
+
+                            <hr>
+
+                            <a href="/logout" class="logout-link">
+                                <i class="fa-solid fa-right-from-bracket"></i>
+                                Logout
+                            </a>
+
+                        </div>
+
+                    </div>
 
                 <% } %>
 
             </div>
 
         </div>
+
     </div>
 </nav>
