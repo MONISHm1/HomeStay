@@ -1,15 +1,13 @@
 <nav class="navbar navbar-expand-lg bg-white border-bottom sticky-top">
     <div class="container-fluid px-4">
 
-        
         <a class="navbar-brand logo" href="/listings">
-        <div class="logo-badge">
-        <i class="fa-solid fa-mountain-city"></i>
-       </div>
-       <span class="logo-text">HomeStay</span>
-       </a>
+            <div class="logo-badge">
+                <i class="fa-solid fa-mountain-city"></i>
+            </div>
+            <span class="logo-text">HomeStay</span>
+        </a>
 
-        
         <button
             class="navbar-toggler"
             type="button"
@@ -19,59 +17,62 @@
             <span class="navbar-toggler-icon"></span>
         </button>
 
-      
         <div class="collapse navbar-collapse" id="navbarNav">
 
-            
-            <!-- <div class="navbar-nav">
-                <a class="nav-link fw-semibold" href="/listings">
-                    Explore
-                </a>
-            </div> -->
+           
+            <form
+                action="/listings"
+                method="GET"
+                class="d-flex mx-auto search-form">
 
-       
-            <form class="d-flex mx-auto search-form">
+                
                 <input
                     class="form-control search-box"
                     type="search"
-                    placeholder="Search destinations">
+                    name="search"
+                    placeholder="Search destinations, country, category..."
+                    value="<%= typeof search !== 'undefined' ? search : '' %>">
 
-                <button class="search-btn ms-2">
+               
+                <button
+                    type="submit"
+                    class="search-btn ms-2">
                     <i class="fa-solid fa-magnifying-glass"></i>
                     Search
                 </button>
             </form>
 
-        
             <div class="navbar-nav fw-bold ms-auto align-items-center">
 
-    <% if(currentUser){ %>
-    <div class="user-profile">
-        <div class="avatar">
-            <%= currentUser.username.charAt(0).toUpperCase() %>
-        </div>
+                <% if(currentUser){ %>
+                    <div class="user-profile">
+                        <div class="avatar">
+                            <%= currentUser.username.charAt(0).toUpperCase() %>
+                        </div>
 
-        <span>
-            <%= currentUser.username %>
-        </span>
-    </div>
-<% } %>
+                        <span>
+                            <%= currentUser.username %>
+                        </span>
+                    </div>
+                <% } %>
 
-    <a class="nav-link" href="/listings/new">Add Your Home</a>
+                <a class="nav-link" href="/listings/new">Add Your Home</a>
 
-    <% if (!currentUser) { %>
-        <a class="nav-link" href="/login">Loginn</a>
-        <a class="nav-link" href="/signup">Sign Up</a>
+                <% if (!currentUser) { %>
 
-    <% } else { %>
+                    <a class="nav-link" href="/login">Loginn</a>
 
-        <a class="nav-link logout-btn" href="/logout">
-            Log Out
-        </a>
+                    <a class="nav-link" href="/signup">Sign Up</a>
 
-    <% } %>
+                <% } else { %>
 
-</div>
+                    <a class="nav-link logout-btn" href="/logout">
+                        Log Out
+                    </a>
+
+                <% } %>
+
+            </div>
 
         </div>
     </div>

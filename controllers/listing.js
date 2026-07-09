@@ -1,24 +1,47 @@
 const Listing = require("../models/listing.js");
 const { geocodeLocation } = require("../utils/geocode");
 
+
+
 // Index Route Callback to see all Listings.
 module.exports.index = async (req, res) => {
-  const { category } = req.query;
-  let filter = {};
-  if (category) {
-    filter.category = category;
-  }
-  const allListings = await Listing.find(filter);
-  res.render("../views/listings/index.ejs", {
-    listings: allListings,
-    activeCategory: category || null,
-  });
+    const { category, search } = req.query;
+
+    let filter = {};
+
+    // Category Filter
+    if (category) {
+        filter.category = category;
+    }
+
+    // Search Filter
+    if (search && search.trim() !== "") {
+        filter.$or = [
+            { title: { $regex: search, $options: "i" } },
+            { location: { $regex: search, $options: "i" } },
+            { country: { $regex: search, $options: "i" } },
+            { category: { $regex: search, $options: "i" } },
+        ];
+    }
+
+    const allListings = await Listing.find(filter);
+
+    res.render("../views/listings/index.ejs", {
+        listings: allListings,
+        activeCategory: category || null,
+        search: search || "",
+    });
 };
+
+
+
 
 // New Form to Create new Listings.
 module.exports.newListingForm = (req, res) => {
   res.render("../views/listings/new.ejs");
 };
+
+
 
 // Show Listing Details.
 module.exports.showListingDetails = async (req, res) => {
@@ -34,6 +57,9 @@ module.exports.showListingDetails = async (req, res) => {
   }
   res.render("../views/listings/show.ejs", { listing });
 };
+
+
+
 
 // Create and Save new Listing in DB.
 module.exports.saveNewListing = async (req, res, next) => {
@@ -78,6 +104,9 @@ module.exports.saveNewListing = async (req, res, next) => {
   }
 };
 
+
+
+
 // New Form to Edit Listing.
 module.exports.editListingForm = async (req, res) => {
   const { id } = req.params;
@@ -96,6 +125,9 @@ module.exports.editListingForm = async (req, res) => {
   res.render("../views/listings/edit.ejs", { listing, previewImage });
 };
 
+
+
+
 // Update Edited Listing data in DB.
 module.exports.updateListing = async (req, res) => {
   const { id } = req.params;
@@ -110,6 +142,8 @@ module.exports.updateListing = async (req, res) => {
   req.flash("success", "Listing Updated!");
   res.redirect(`/listings/${id}`);
 };
+
+
 
 // Delete Lising.
 module.exports.deleteListing = async (req, res) => {
