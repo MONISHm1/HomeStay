@@ -1,115 +1,197 @@
 <% layout("layouts/boilerplate") %>
-
 <link rel="stylesheet" href="/css/profile.css">
+<div class="profile-page">
 
-<div class="profile-container">
-
-    <div class="profile-card">
-
-        <div class="profile-avatar">
-
-            <%= user.username.charAt(0).toUpperCase() %>
-
-        </div>
-
-        <h2>
-
-            <%= user.username %>
-
-        </h2>
-
-        <p>
-
-            <%= user.email %>
-
-        </p>
-
-        <small>
-
-            Member since
-
-            <%= user.createdAt.toDateString() %>
-
-        </small>
-
-    </div>
-
-    <div class="profile-stats">
-
-        <div class="stat-card">
-
-            <h3>
-
-                <%= totalListings %>
-
-            </h3>
-
-            <p>Total Listings</p>
-
-        </div>
-
-        <div class="stat-card">
-
-            <h3>
-
-                <%= totalReviews %>
-
-            </h3>
-
-            <p>Total Reviews</p>
-
-        </div>
-
-    </div>
-
-    <h3 class="mt-5">
-
-        My Listings
-
-    </h3>
-
-    <div class="row">
-
-        <% listings.forEach(listing=>{ %>
-
-        <div class="col-md-4">
-
-            <a href="/listings/<%= listing._id %>" class="listing-link">
-
-                <div class="card">
-
+    <section class="profile-hero">
+        <div class="profile-cover"></div>
+        <div class="profile-card">
+            <div class="profile-avatar-wrapper">
+                <% if(user.avatar && user.avatar.url && user.avatar.filename !== "default-avatar"){ %>
                     <img
+                        src="<%= user.avatar.url %>"
+                        alt="<%= user.username %>"
+                        class="profile-avatar-img">
+                <% } else { %>
 
-                    src="<%= listing.image.url %>"
+                    <div class="profile-avatar">
+                        <%= user.username.charAt(0).toUpperCase() %>
+                    </div>
+                <% } %>
+            </div>
 
-                    class="card-img-top"
+            <div class="profile-user-details">
+                <h1>
+                    <%= user.username %>
+                </h1>
+                <p class="profile-email">
+                    <i class="fa-solid fa-envelope"></i>
+                    <%= user.email %>
+                </p>
+                <% if(user.bio){ %>
+                    <p class="profile-bio">
+                        "<%= user.bio %>"
+                    </p>
+                <% } else { %>
+                    <p class="profile-bio empty">
+                        Add a short bio to introduce yourself.
+                    </p>
+                <% } %>
+                <div class="profile-member">
+                    <i class="fa-solid fa-calendar-days"></i>
+                    <% if(user.createdAt){ %>
+                        Member since
+                        <%= new Date(user.createdAt).toLocaleDateString("en-IN",{
+                            month:"long",
+                            year:"numeric"
+                        }) %>
+                    <% } else { %>
+                        Recently Joined
+                    <% } %>
+                </div>
+            </div>
+        </div>
+    </section>
 
-                    style="height:220px;object-fit:cover;">
+    <section class="profile-information">
+        <div class="info-card">
+            <div class="info-icon">
+                <i class="fa-solid fa-phone"></i>
+            </div>
+            <div>
+                <h6>Phone</h6>
+                <p>
+                    <%= user.phone || "Not Added Yet" %>
+                </p>
+            </div>
+        </div>
+        <div class="info-card">
+            <div class="info-icon">
+                <i class="fa-solid fa-earth-asia"></i>
+            </div>
+            <div>
+                <h6>Country</h6>
+                <p>
+                    <%= user.country || "Not Added Yet" %>
+                </p>
+            </div>
+        </div>
 
-                    <div class="card-body">
+        <div class="info-card">
+            <div class="info-icon">
+                <i class="fa-solid fa-house"></i>
+            </div>
+            <div>
+                <h6>Listings</h6>
+                <p>
+                    <%= totalListings %>
+                </p>
+            </div>
+        </div>
+    </section>
 
-                        <h5>
 
+
+    <section class="stats-section">
+        <div class="stat-box">
+            <h2>
+                <%= totalListings %>
+            </h2>
+            <p>
+                Listings
+            </p>
+        </div>
+
+        <div class="stat-box">
+            <h2>
+                <%= totalReviews %>
+            </h2>
+            <p>
+                Reviews
+            </p>
+        </div>
+
+        <div class="stat-box">
+            <h2>
+                <%= new Date(user.createdAt).getFullYear() %>
+            </h2>
+            <p>
+                Joined
+            </p>
+        </div>
+    </section>
+
+    <div class="profile-button-area">
+        <a
+            href="/profile/edit"
+            class="profile-btn">
+            <i class="fa-solid fa-user-pen"></i>
+            Edit Profile
+        </a>
+    </div>
+
+
+<section class="my-listings">
+    <div class="section-title">
+        <div>
+            <h2>My Listings</h2>
+            <p>Your hosted properties on HomeStay</p>
+        </div>
+        <span class="listing-count">
+            <%= totalListings %> Listing<%= totalListings !== 1 ? "s" : "" %>
+        </span>
+    </div>
+    <% if(listings.length === 0){ %>
+        <div class="empty-listings">
+            <i class="fa-solid fa-house-circle-xmark"></i>
+            <h3>No Listings Yet</h3>
+            <p>
+                Start hosting today by adding your first property.
+            </p>
+            <a href="/listings/new" class="add-listing-btn">
+                Add New Listing
+            </a>
+        </div>
+    <% } else { %>
+
+        <div class="profile-listings-grid">
+            <% listings.forEach(listing => { %>
+                <div class="profile-listing-card">
+                    <div class="listing-image">
+                        <img
+                            src="<%= listing.image.url %>"
+                            alt="<%= listing.title %>">
+                    </div>
+                    <div class="listing-body">
+                        <h3>
                             <%= listing.title %>
-
-                        </h5>
-
-                        <p>
-
-                            ₹<%= listing.price.toLocaleString("en-IN") %>
-
+                        </h3>
+                        <p class="listing-location">
+                            <i class="fa-solid fa-location-dot"></i>
+                            <%= listing.location %>, <%= listing.country %>
                         </p>
 
+                        <div class="listing-price">
+                            ₹<%= listing.price.toLocaleString("en-IN") %>
+                            <span>/ night</span>
+                        </div>
+
+                        <div class="listing-actions">
+                            <a
+                                href="/listings/<%= listing._id %>"
+                                class="view-btn">
+                                View
+                            </a>
+
+                            <a
+                                href="/listings/<%= listing._id %>/edit"
+                                class="edit-btn">
+                                Edit
+                            </a>
+                        </div>
                     </div>
-
                 </div>
-
-            </a>
-
+            <% }) %>
         </div>
-
-        <% }) %>
-
-    </div>
-
+    <% } %>
+</section>
 </div>

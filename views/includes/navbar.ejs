@@ -1,7 +1,8 @@
 <nav class="navbar navbar-expand-lg bg-white border-bottom sticky-top">
+
     <div class="container-fluid px-4">
 
-        <!-- Logo -->
+        
         <a class="navbar-brand logo" href="/listings">
             <div class="logo-badge">
                 <i class="fa-solid fa-mountain-city"></i>
@@ -9,20 +10,15 @@
             <span class="logo-text">HomeStay</span>
         </a>
 
-        <!-- Mobile Toggle -->
         <button
             class="navbar-toggler"
             type="button"
             data-bs-toggle="collapse"
             data-bs-target="#navbarNav">
-
             <span class="navbar-toggler-icon"></span>
-
         </button>
 
         <div class="collapse navbar-collapse" id="navbarNav">
-
-            <!-- Search -->
             <form
                 action="/listings"
                 method="GET"
@@ -38,44 +34,42 @@
                 <button
                     type="submit"
                     class="search-btn ms-2">
-
                     <i class="fa-solid fa-magnifying-glass"></i>
                     Search
-
                 </button>
-
             </form>
 
-            <!-- Right Side -->
+            
             <div class="navbar-nav fw-bold ms-auto align-items-center">
-
-                <!-- Add Listing -->
                 <a class="nav-link me-2" href="/listings/new">
                     Add Your Home
                 </a>
-
                 <% if(!currentUser){ %>
-
                     <a class="nav-link" href="/login">
                         Login
                     </a>
-
                     <a class="nav-link" href="/signup">
                         Sign Up
                     </a>
-
                 <% } else { %>
-
-                    <!-- Profile Dropdown -->
                     <div class="profile-wrapper">
-
                         <button
                             id="profileBtn"
-                            class="user-profile-btn">
+                            class="user-profile-btn"
+                            type="button">
+                            <% if(currentUser.avatar && currentUser.avatar.url){ %>
+                                <img
+                                    src="<%= currentUser.avatar.url %>"
+                                    class="navbar-profile-img"
+                                    alt="Profile">
 
-                            <div class="avatar">
-                                <%= currentUser.username.charAt(0).toUpperCase() %>
-                            </div>
+                            <% } else { %>
+
+                                <div class="avatar">
+                                    <%= currentUser.username.charAt(0).toUpperCase() %>
+                                </div>
+
+                            <% } %>
 
                             <span class="profile-name">
                                 <%= currentUser.username %>
@@ -85,41 +79,60 @@
 
                         </button>
 
-                        <!-- Dropdown -->
+                       
                         <div
                             id="profileDropdown"
                             class="profile-dropdown">
 
+                          
                             <div class="dropdown-header">
 
-    <div class="dropdown-avatar">
-        <%= currentUser.username.charAt(0).toUpperCase() %>
-    </div>
+                                <% if(currentUser.avatar && currentUser.avatar.url){ %>
 
-    <div class="dropdown-user-info">
+                                    <img
+                                        src="<%= currentUser.avatar.url %>"
+                                        class="dropdown-profile-img"
+                                        alt="Profile">
 
-        <h5 class="dropdown-username">
-            <%= currentUser.username %>
-        </h5>
+                                <% } else { %>
 
-        <p class="dropdown-email">
-            <i class="fa-solid fa-envelope"></i>
-            <%= currentUser.email %>
-        </p>
+                                    <div class="dropdown-avatar">
+                                        <%= currentUser.username.charAt(0).toUpperCase() %>
+                                    </div>
 
-        <span class="dropdown-badge">
-            HomeStay Member
-        </span>
+                                <% } %>
 
-    </div>
+                                <div class="dropdown-user-info">
 
-</div>
+                                    <h5 class="dropdown-username">
+                                        <%= currentUser.username %>
+                                    </h5>
+
+                                    <p class="dropdown-email">
+                                        <i class="fa-solid fa-envelope"></i>
+                                        <%= currentUser.email %>
+                                    </p>
+
+                                    <span class="dropdown-badge">
+                                        HomeStay Member
+                                    </span>
+
+                                </div>
+
+                            </div>
 
                             <hr>
 
+                          
                             <a href="/profile">
                                 <i class="fa-solid fa-user"></i>
                                 My Profile
+                            </a>
+
+                            
+                            <a href="/profile#my-listings">
+                                <i class="fa-solid fa-list"></i>
+                                My Listings
                             </a>
 
                             <a href="/listings/new">
@@ -127,11 +140,21 @@
                                 Add New Listing
                             </a>
 
+                            <a href="/bookings">
+                                <i class="fa-solid fa-calendar-check"></i>
+                                My Bookings
+                            </a>
+
                             <hr>
 
-                            <a href="/logout" class="logout-link">
+                            <a
+                                href="/logout"
+                                class="logout-link">
+
                                 <i class="fa-solid fa-right-from-bracket"></i>
+
                                 Logout
+
                             </a>
 
                         </div>
@@ -145,4 +168,5 @@
         </div>
 
     </div>
+
 </nav>

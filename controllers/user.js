@@ -49,25 +49,27 @@ module.exports.logoutUser = (req, res, next) => {
 
 
 module.exports.profile = async (req, res) => {
-   
+
     const user = await User.findById(req.user._id);
+
     const listings = await Listing.find({
         owner: user._id,
-    });
+    }).populate("reviews");
+
     const totalListings = listings.length;
+
     let totalReviews = 0;
     let totalRating = 0;
 
     listings.forEach((listing) => {
+
         totalReviews += listing.reviews.length;
-    });
-    for (let listing of listings) {
-        await listing.populate("reviews");
 
         listing.reviews.forEach((review) => {
             totalRating += review.rating;
         });
-    }
+
+    });
 
     const averageRating =
         totalReviews > 0
@@ -81,4 +83,5 @@ module.exports.profile = async (req, res) => {
         totalReviews,
         averageRating,
     });
+
 };
