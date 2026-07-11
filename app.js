@@ -22,6 +22,8 @@ const flash = require("connect-flash");
 const passport = require("passport");
 const LocalStrategy = require("passport-local");
 const User = require("./models/user.js");
+const bookingRouter = require("./routes/booking");
+
 
 // Requiring Express Router files.
 const listingRouter = require("./routes/listing.js");
@@ -108,10 +110,12 @@ app.get("/", (req, res) => {
 // Express Routers
 app.use("/listings", listingRouter);
 app.use("/listings/:id/reviews", reviewRouter);
+app.use("/bookings", bookingRouter);
 app.use("/", userRouter);
 app.use("/.well-known", (req, res) => {
     res.status(204).end();
 });
+
 
 // Footer Static Pages
 app.get("/privacy", (req, res) => res.render("static/privacy.ejs"));

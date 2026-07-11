@@ -1,0 +1,146 @@
+<% layout("layouts/boilerplate") %>
+
+<link rel="stylesheet" href="/css/booking.css">
+
+<div class="booking-page">
+
+    <div class="booking-header">
+        <h1>Request Your Stay</h1>
+        <p>
+            Tell the host about your trip. The host will review your request
+            before confirming your stay.
+        </p>
+    </div>
+
+    <div class="booking-container">
+        <div class="booking-form-card">
+            <form action="/bookings" method="POST">
+
+                <input
+                    type="hidden"
+                    name="listingId"
+                    value="<%= listing._id %>">
+
+                <div class="form-group">
+                    <label>Arrival Date</label>
+                    <input
+                        type="date"
+                        name="arrivalDate"
+                        class="form-control"
+                        required>
+                </div>
+
+                <div class="form-group">
+                    <label>Departure Date</label>
+                    <input
+                        type="date"
+                        name="departureDate"
+                        class="form-control"
+                        required>
+                </div>
+
+                <div class="form-group">
+                    <label>Number of Guests</label>
+                    <input
+                        type="number"
+                        name="guests"
+                        class="form-control"
+                        min="1"
+                        value="1"
+                        required>
+                </div>
+
+                <div class="form-group">
+                    <label>Purpose of Visit</label>
+
+                    <select
+                        name="purpose"
+                        class="form-select"
+                        required>
+
+                        <option value="">Choose Purpose</option>
+                        <option>Vacation</option>
+                        <option>Business</option>
+                        <option>Family Visit</option>
+                        <option>Workation</option>
+                        <option>Adventure</option>
+                        <option>Education</option>
+                        <option>Medical</option>
+                        <option>Other</option>
+
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>Special Requirements</label>
+
+                    <textarea
+                        name="specialRequirements"
+                        rows="3"
+                        class="form-control"
+                        placeholder="Parking, WiFi, Early Check-in..."></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label>Message to Host</label>
+
+                    <textarea
+                        name="message"
+                        rows="5"
+                        class="form-control"
+                        placeholder="Introduce yourself and tell the host about your stay..."
+                        required></textarea>
+                </div>
+
+                <button class="request-btn">
+                    Send Stay Request
+                </button>
+
+            </form>
+
+        </div>
+
+        <div class="booking-summary">
+
+            <img
+                src="<%= listing.image.url %>"
+                alt="<%= listing.title %>">
+
+            <h2><%= listing.title %></h2>
+
+            <p>
+                <i class="fa-solid fa-location-dot"></i>
+                <%= listing.location %>, <%= listing.country %>
+            </p>
+
+            <div class="summary-price">
+                ₹<%= listing.price.toLocaleString("en-IN") %>
+                <span>/ night</span>
+            </div>
+
+            <hr>
+
+            <div class="summary-info">
+
+                <div>
+                    <strong>Host</strong>
+                    <p><%= listing.owner.username %></p>
+                </div>
+
+                <div>
+                    <strong>Status</strong>
+                    <p class="pending">Pending Approval</p>
+                </div>
+
+            </div>
+
+            <div class="summary-note">
+                <i class="fa-solid fa-circle-info"></i>
+                Your request will be reviewed by the host before confirmation.
+            </div>
+
+        </div>
+
+    </div>
+
+</div>

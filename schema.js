@@ -26,9 +26,44 @@ module.exports.listingSchema = Joi.object({
 
 
 
-module.exports.reviewSchema = Joi.object({
-    review: Joi.object({
-        rating: Joi.number().min(1).max(5).required(),
-        comment: Joi.string().required(),
-    }).required(),
+module.exports.bookingSchema = Joi.object({
+
+    listingId: Joi.string()
+        .required(),
+
+    arrivalDate: Joi.date()
+        .required(),
+
+    departureDate: Joi.date()
+        .greater(Joi.ref("arrivalDate"))
+        .required(),
+
+    guests: Joi.number()
+        .integer()
+        .min(1)
+        .max(20)
+        .required(),
+
+    purpose: Joi.string()
+        .valid(
+            "Vacation",
+            "Business",
+            "Family Visit",
+            "Workation",
+            "Medical",
+            "Adventure",
+            "Education",
+            "Other"
+        )
+        .required(),
+
+    specialRequirements: Joi.string()
+        .allow("")
+        .default(""),
+
+    message: Joi.string()
+        .min(10)
+        .max(500)
+        .required()
+
 });

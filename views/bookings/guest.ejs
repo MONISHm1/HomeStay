@@ -1,0 +1,245 @@
+<% layout("layouts/boilerplate") %>
+<link rel="stylesheet" href="/css/guest.css">
+<div class="guest-dashboard">
+
+    <section class="guest-hero">
+        <div>
+            <h1>
+                Welcome back,
+                <%= currentUser.username %> 👋
+            </h1>
+            <p>
+                Manage all your stay requests from one place.
+            </p>
+        </div>
+    </section>
+
+    <section class="stats-grid">
+        <div class="stat-card active">
+            <h2><%= bookingStats.all %></h2>
+            <p>Total Requests</p>
+        </div>
+
+        <div class="stat-card pending">
+            <h2><%= bookingStats.pending %></h2>
+            <p>Pending</p>
+        </div>
+
+        <div class="stat-card accepted">
+            <h2><%= bookingStats.accepted %></h2>
+            <p>Accepted</p>
+        </div>
+
+        <div class="stat-card rejected">
+            <h2><%= bookingStats.rejected %></h2>
+            <p>Rejected</p>
+        </div>
+
+        <div class="stat-card cancelled">
+            <h2><%= bookingStats.cancelled %></h2>
+            <p>Cancelled</p>
+        </div>
+    </section>
+
+
+    <section class="booking-filters">
+        <button class="filter-btn active" data-filter="All">
+            All
+        </button>
+        <button class="filter-btn" data-filter="Pending">
+            Pending
+        </button>
+        <button class="filter-btn" data-filter="Accepted">
+            Accepted
+        </button>
+        <button class="filter-btn" data-filter="Rejected">
+            Rejected
+        </button>
+        <button class="filter-btn" data-filter="Cancelled">
+            Cancelled
+        </button>
+    </section>
+
+
+<section class="booking-grid">
+
+    <% if(bookings.length===0){ %>
+
+        <div class="empty-state">
+
+            <i class="fa-solid fa-calendar-xmark"></i>
+
+            <h2>No Stay Requests Yet</h2>
+
+            <p>
+                Once you request a stay, it will appear here.
+            </p>
+
+            <a
+                href="/listings"
+                class="explore-btn">
+
+                Explore Homes
+
+            </a>
+
+        </div>
+
+    <% } else { %>
+
+        <% bookings.forEach(booking=>{ %>
+
+            <div
+                class="booking-card"
+                data-status="<%= booking.status %>">
+
+                <!-- Property Image -->
+
+                <img
+                    src="<%= booking.listingImage %>"
+                    class="booking-image"
+                    alt="<%= booking.listingTitle %>">
+
+                <!-- Content -->
+
+                <div class="booking-content">
+
+                    <div class="booking-top">
+
+                        <h3>
+
+                            <%= booking.listingTitle %>
+
+                        </h3>
+
+                        <span class="status <%= booking.status.toLowerCase() %>">
+
+                            <%= booking.status %>
+
+                        </span>
+
+                    </div>
+
+                    <p class="booking-location">
+
+                        <i class="fa-solid fa-location-dot"></i>
+
+                        <%= booking.listingLocation %>,
+
+                        <%= booking.listingCountry %>
+
+                    </p>
+
+                    <div class="booking-info-grid">
+
+                        <div>
+
+                            <span>Arrival</span>
+
+                            <strong>
+
+                                <%= new Date(booking.arrivalDate).toLocaleDateString() %>
+
+                            </strong>
+
+                        </div>
+
+                        <div>
+
+                            <span>Departure</span>
+
+                            <strong>
+
+                                <%= new Date(booking.departureDate).toLocaleDateString() %>
+
+                            </strong>
+
+                        </div>
+
+                        <div>
+
+                            <span>Guests</span>
+
+                            <strong>
+
+                                <%= booking.guests %>
+
+                            </strong>
+
+                        </div>
+
+                        <div>
+
+                            <span>Purpose</span>
+
+                            <strong>
+
+                                <%= booking.purpose %>
+
+                            </strong>
+
+                        </div>
+
+                    </div>
+
+                    <% if(booking.message){ %>
+
+                        <div class="booking-message">
+
+                            <strong>
+
+                                Message
+
+                            </strong>
+
+                            <p>
+
+                                "<%= booking.message %>"
+
+                            </p>
+
+                        </div>
+
+                    <% } %>
+
+                    <div class="booking-actions">
+
+                        <a
+                            href="/bookings/<%= booking._id %>"
+                            class="view-btn">
+
+                            View Details
+
+                        </a>
+
+                        <% if(booking.status==="Pending"){ %>
+
+                            <form
+                                action="/bookings/<%= booking._id %>/cancel?_method=PATCH"
+                                method="POST">
+
+                                <button
+                                    class="cancel-btn">
+
+                                    Cancel Request
+
+                                </button>
+
+                            </form>
+
+                        <% } %>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        <% }) %>
+
+    <% } %>
+
+</section>
+</div>
+
+<script src="/js/guest.js"></script>

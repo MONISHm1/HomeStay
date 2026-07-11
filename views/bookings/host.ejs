@@ -1,0 +1,152 @@
+<% layout("layouts/boilerplate") %>
+
+<link rel="stylesheet" href="/css/host.css">
+
+<div class="host-dashboard">
+
+    <div class="host-header">
+        <h1>Incoming Stay Requests</h1>
+        <p>Review and manage requests for your properties.</p>
+    </div>
+
+    <div class="host-stats">
+        <div class="host-stat">
+            <h2><%= stats.total %></h2>
+            <span>Total</span>
+        </div>
+
+        <div class="host-stat">
+            <h2><%= stats.pending %></h2>
+            <span>Pending</span>
+        </div>
+
+        <div class="host-stat">
+            <h2><%= stats.accepted %></h2>
+            <span>Accepted</span>
+        </div>
+
+        <div class="host-stat">
+            <h2><%= stats.rejected %></h2>
+            <span>Rejected</span>
+        </div>
+    </div>
+
+    <% if (bookings.length === 0) { %>
+
+        <div class="empty-host">
+            <i class="fa-solid fa-house-circle-check"></i>
+            <h2>No Stay Requests</h2>
+            <p>Requests from guests will appear here.</p>
+        </div>
+
+    <% } %>
+
+    <div class="host-grid">
+
+        <% bookings.forEach(booking => { %>
+
+            <div class="host-card">
+
+                <img src="<%= booking.listingImage %>" alt="<%= booking.listingTitle %>">
+
+                <div class="host-content">
+
+                    <h3><%= booking.listingTitle %></h3>
+
+                    <p>
+                        <i class="fa-solid fa-location-dot"></i>
+                        <%= booking.listingLocation %>, <%= booking.listingCountry %>
+                    </p>
+
+                    <hr>
+
+                    <p>
+                        <strong>Guest:</strong>
+                        <%= booking.guest.username %>
+                    </p>
+
+                    <p>
+                        <strong>Email:</strong>
+                        <%= booking.guest.email %>
+                    </p>
+
+                    <p>
+                        <strong>Purpose:</strong>
+                        <%= booking.purpose %>
+                    </p>
+
+                    <p>
+                        <strong>Guests:</strong>
+                        <%= booking.guests %>
+                    </p>
+
+                    <p>
+                        <strong>Status:</strong>
+                        <span class="status <%= booking.status.toLowerCase() %>">
+                            <%= booking.status %>
+                        </span>
+                    </p>
+
+                    <div class="host-buttons">
+
+                        <a href="/bookings/<%= booking._id %>" class="details-btn">
+                            View
+                        </a>
+
+                       <% if(booking.status==="Pending"){ %>
+
+<div class="host-response-box">
+
+    <label>
+
+        Response to Guest
+
+    </label>
+
+    <!-- ACCEPT -->
+
+    <form
+        action="/bookings/<%= booking._id %>/accept?_method=PATCH"
+        method="POST">
+
+        <textarea
+            name="hostResponse"
+            rows="3"
+            class="response-textarea"
+            placeholder="Example: Looking forward to hosting you!"></textarea>
+
+        <button class="accept-btn">
+
+            Accept Request
+
+        </button>
+
+    </form>
+
+    <!-- REJECT -->
+
+    <form
+        action="/bookings/<%= booking._id %>/reject?_method=PATCH"
+        method="POST">
+
+        <textarea
+            name="hostResponse"
+            rows="3"
+            class="response-textarea"
+            placeholder="Example: Sorry, the property is unavailable on these dates."></textarea>
+
+        <button class="reject-btn">
+
+            Reject Request
+
+        </button>
+
+    </form>
+
+</div>
+
+<% } %>
+
+    </div>
+
+</div>

@@ -1,6 +1,7 @@
 const Listing = require("../models/listing.js");
 const Review = require("../models/review.js");
-const { listingSchema, reviewSchema } = require("../schema.js");
+const Booking = require("../models/booking");
+const { listingSchema, reviewSchema, bookingSchema } = require("../schema.js");
 const ExpressError = require("../utils/ExpressError.js");
 
 module.exports.isLoggedIn = (req, res, next) => {
@@ -59,4 +60,51 @@ module.exports.validateReview = (req, res, next) => {
     } else {
         next();
     }
+};
+
+
+module.exports.validateBooking = (req, res, next) => {
+
+    const { error } = bookingSchema.validate(req.body);
+
+    if (error) {
+        throw new ExpressError(
+            400,
+            error.details[0].message
+        );
+    }
+
+    next();
+};
+
+module.exports.isBookingGuest = async (req, res, next) => {
+    const booking = await Booking.findById(req.params.id);
+    if (!booking) {
+        req.flash("error", "Booking not found.");
+        return res.redirect("/bookings/my-requests");
+    }
+    if (!booking.guest.equals(req.user._id)) {
+        req.flash(
+            "error",
+            "Unauthorized action."
+        );
+        return res.redirect("/bookings/my-requests");
+    }
+    next();
+};
+
+module.exports.isBookingHost = async (req, res, next) => {
+    const booking = await Booking.findById(req.params.id);
+    if (!booking) {
+        req.flash("error", "Booking not found.");
+        return res.redirect("/bookings/host");
+    }
+    if (!booking.host.equals(req.user._id)) {
+        req.flash(
+            "error",
+            "Unauthorized action."
+        );
+        return res.redirect("/bookings/host");
+    }
+    next();
 };

@@ -1,0 +1,75 @@
+<% layout("layouts/boilerplate") %>
+
+<link rel="stylesheet" href="/css/booking.css">
+
+<div class="booking-details-container">
+    <a href="/bookings/my-requests" class="back-btn">
+        ← Back
+    </a>
+
+    <div class="details-card">
+        <img
+            src="<%= booking.listingImage %>"
+            class="details-image"
+            alt="<%= booking.listingTitle %>">
+
+        <div class="details-content">
+            <div class="details-header">
+                <h2><%= booking.listingTitle %></h2>
+
+                <span class="status <%= booking.status.toLowerCase() %>">
+                    <%= booking.status %>
+                </span>
+            </div>
+
+            <p>
+                <i class="fa-solid fa-location-dot"></i>
+                <%= booking.listingLocation %>,
+                <%= booking.listingCountry %>
+            </p>
+
+            <hr>
+
+            <div class="details-grid">
+                <div>
+                    <strong>Arrival</strong>
+                    <p><%= new Date(booking.arrivalDate).toDateString() %></p>
+                </div>
+
+                <div>
+                    <strong>Departure</strong>
+                    <p><%= new Date(booking.departureDate).toDateString() %></p>
+                </div>
+
+                <div>
+                    <strong>Guests</strong>
+                    <p><%= booking.guests %></p>
+                </div>
+
+                <div>
+                    <strong>Purpose</strong>
+                    <p><%= booking.purpose %></p>
+                </div>
+            </div>
+
+            <hr>
+
+            <h5>Message</h5>
+            <p><%= booking.message %></p>
+            <% if (booking.specialRequirements) { %>
+                <hr>
+                <h5>Special Requirements</h5>
+                <p><%= booking.specialRequirements %></p>
+            <% } %>
+            <hr>
+            <h5>Host</h5>
+            <p><%= booking.host.username %></p>
+            <p><%= booking.host.email %></p>
+            <% if (booking.hostResponse) { %>
+                <hr>
+                <h5>Host Response</h5>
+                <p><%= booking.hostResponse %></p>
+            <% } %>
+        </div>
+    </div>
+</div>

@@ -141,37 +141,118 @@
                     <% } %>
                 </div>
             </div>
+        </div>
+
+        <!-- ================= RIGHT SIDEBAR ================= -->
+
+<div class="show-right">
+
+    <div class="show-price-card">
+
+        <!-- Price -->
+
+        <div class="show-price">
+
+            <span class="show-price-amount">
+
+                ₹<%= listing.price.toLocaleString("en-IN") %>
+
+            </span>
+
+            <span class="show-price-label">
+
+                / night
+
+            </span>
 
         </div>
 
-        <!-- Right Column - Price Card -->
-        <div class="show-right">
-            <div class="show-price-card">
-                <div class="show-price">
-                    <span class="show-price-amount">&#8377;<%= listing.price.toLocaleString("en-IN") %></span>
-                    <span class="show-price-label"> / night</span>
-                </div>
-                <div class="show-price-taxes">
-                    <small>+18% GST • &#8377;<%= Math.round(listing.price * 0.18).toLocaleString("en-IN") %> taxes</small>
-                </div>
-                <hr />
-                <div class="show-price-total">
-                    <span>Total</span>
-                    <span>&#8377;<%= Math.round(listing.price * 1.18).toLocaleString("en-IN") %></span>
-                </div>
-                <% if (currentUser) { %>
-<form action="/listings/<%= listing._id %>/reserve" method="POST">
-    <button type="submit" class="show-reserve-btn">Reserve</button>
-</form>
-<% } else { %>
-<a href="/login" class="show-reserve-btn" style="display:block; text-align:center; text-decoration:none;">
-    Login to Reserve
-</a>
-<% } %>
-<p class="show-reserve-note">You won't be charged yet</p>
+        <!-- Tax -->
+
+        <div class="show-price-taxes">
+
+            <small>
+
+                +18% GST • ₹<%= Math.round(listing.price * 0.18).toLocaleString("en-IN") %>
+
+                taxes
+
+            </small>
+
+        </div>
+
+        <hr>
+
+        <!-- Total -->
+
+        <div class="show-price-total">
+
+            <span>
+
+                Estimated Total
+
+            </span>
+
+            <span>
+
+                ₹<%= Math.round(listing.price * 1.18).toLocaleString("en-IN") %>
+
+            </span>
+
+        </div>
+
+        <!-- Stay Information -->
+
+        <div class="stay-highlights">
+
+            <div class="stay-item">
+
+                <i class="fa-solid fa-circle-check"></i>
+
+                <span>Host approval required</span>
+            </div>
+            <div class="stay-item">
+                <i class="fa-solid fa-comments"></i>
+                <span>Send a personalized stay request</span>
+            </div>
+            <div class="stay-item">
+                <i class="fa-solid fa-calendar-check"></i>
+                <span>Select your preferred stay dates</span>
             </div>
         </div>
+        <% if(currentUser){ %>
+            <% if(currentUser._id.equals(listing.owner._id)){ %>
+                <button
+                    class="show-reserve-btn disabled-btn"
+                    disabled>
+                    This is Your Property
+                </button>
+            <% } else { %>
+                <a
+                    href="/bookings/new/<%= listing._id %>"
+                    class="show-reserve-btn">
 
+                    <i class="fa-solid fa-paper-plane"></i>
+                    Request Stay
+                </a>
+
+            <% } %>
+
+        <% } else { %>
+
+            <a
+                href="/login"
+                class="show-reserve-btn">
+                Login to Request Stay
+            </a>
+        <% } %>
+
+        <p class="show-reserve-note">
+            <i class="fa-solid fa-shield-heart"></i>
+            Your request will be reviewed by the host before confirmation.
+        </p>
+    </div>
+</div>
     </div>
 </div>
 
