@@ -10,18 +10,30 @@ cloudinary.config({
 
 const storage = new CloudinaryStorage({
     cloudinary,
+
     params: async (req, file) => {
+        let folder = "HomeStay";
+
+        if (
+            req.originalUrl.includes("/profile") ||
+            req.originalUrl.includes("/users/profile")
+        ) {
+            folder = "HomeStay/profile-images";
+        }
+
         return {
-            folder: "HomeStay",
-            resource_type: "image", 
-            allowed_formats: ["jpg", "jpeg", "png"], 
-            public_id: Date.now() + "-" + file.originalname
+            folder,
+            resource_type: "image",
+            allowed_formats: ["jpg", "jpeg", "png", "webp"],
+            public_id: `${Date.now()}-${file.originalname}`,
         };
-    }
+    },
 });
 
-module.exports = { cloudinary, storage };
-
+module.exports = {
+    cloudinary,
+    storage,
+};
 
 
 

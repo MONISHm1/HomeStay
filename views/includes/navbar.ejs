@@ -87,20 +87,22 @@
                           
                             <div class="dropdown-header">
 
-                                <% if(currentUser.avatar && currentUser.avatar.url){ %>
+                               <% if(currentUser.avatar && currentUser.avatar.url){ %>
 
-                                    <img
-                                        src="<%= currentUser.avatar.url %>"
-                                        class="dropdown-profile-img"
-                                        alt="Profile">
+    <div class="avatar">
+        <img
+            src="<%= currentUser.avatar.url %>"
+            class="navbar-profile-img"
+            alt="<%= currentUser.username %>">
+    </div>
 
-                                <% } else { %>
+<% } else { %>
 
-                                    <div class="dropdown-avatar">
-                                        <%= currentUser.username.charAt(0).toUpperCase() %>
-                                    </div>
+    <div class="avatar">
+        <%= currentUser.username.charAt(0).toUpperCase() %>
+    </div>
 
-                                <% } %>
+<% } %>
 
                                 <div class="dropdown-user-info">
 

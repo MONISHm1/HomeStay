@@ -85,3 +85,35 @@ module.exports.profile = async (req, res) => {
     });
 
 };
+
+
+module.exports.editProfile = async (req, res) => {
+    const user = await User.findById(req.user._id);
+
+    res.render("users/editProfile.ejs", {
+        user,
+    });
+};
+
+
+module.exports.updateProfile = async (req, res) => {
+    const user = await User.findById(req.user._id);
+
+    user.email = req.body.email;
+    user.phone = req.body.phone;
+    user.country = req.body.country;
+    user.bio = req.body.bio;
+
+    if (req.file) {
+        user.avatar = {
+            url: req.file.path,
+            filename: req.file.filename,
+        };
+    }
+
+    await user.save();
+
+    req.flash("success", "Profile updated successfully!");
+
+    res.redirect("/profile");
+};
