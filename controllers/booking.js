@@ -2,7 +2,7 @@ const Booking = require("../models/booking");
 const Listing = require("../models/listing");
 const { hasDateConflict } = require("../utils/bookingUtils");
 
-// Show Stay Request Form
+
 module.exports.showRequestForm = async (req, res) => {
     const { listingId } = req.params;
 
@@ -21,7 +21,7 @@ module.exports.showRequestForm = async (req, res) => {
     res.render("bookings/request", { listing });
 };
 
-// Create Stay Request
+
 module.exports.createBooking = async (req, res) => {
     const {
         listingId,
@@ -72,7 +72,7 @@ module.exports.createBooking = async (req, res) => {
     res.redirect("/bookings/my-requests");
 };
 
-// Guest Dashboard
+
 module.exports.guestDashboard = async (req, res) => {
     const bookings = await Booking.find({
         guest: req.user._id,
@@ -117,7 +117,7 @@ module.exports.guestDashboard = async (req, res) => {
     });
 };
 
-// Host Dashboard
+
 module.exports.hostDashboard = async (req, res) => {
     const bookings = await Booking.find({
         host: req.user._id,
@@ -156,7 +156,7 @@ module.exports.hostDashboard = async (req, res) => {
     });
 };
 
-// Booking Details
+
 module.exports.showBooking = async (req, res) => {
 
     const booking = await Booking.findById(req.params.id)
@@ -184,7 +184,7 @@ module.exports.showBooking = async (req, res) => {
 
 };
 
-// Accept Stay Request
+
 module.exports.acceptBooking = async (req, res) => {
 
     const booking = await Booking.findById(req.params.id);
@@ -221,7 +221,7 @@ module.exports.acceptBooking = async (req, res) => {
 
 };
 
-// Reject Stay Request
+
 module.exports.rejectBooking = async (req, res) => {
     const booking = await Booking.findById(req.params.id);
     if (!booking) {
@@ -237,7 +237,7 @@ module.exports.rejectBooking = async (req, res) => {
     res.redirect("/bookings/host");
 };
 
-// Cancel Stay Request
+
 module.exports.cancelBooking = async (req, res) => {
     const booking = await Booking.findById(req.params.id);
     if (!booking) {
