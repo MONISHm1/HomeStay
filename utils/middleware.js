@@ -30,7 +30,7 @@ module.exports.isOwner = async (req, res, next) => {
     next();
 };
 
-// Middleware to check current User is owner of current Review or not.
+
 module.exports.isReviewAuthor = async (req, res, next) => {
     const { id, reviewId } = req.params;
     let review = await Review.findById(reviewId);
@@ -42,17 +42,17 @@ module.exports.isReviewAuthor = async (req, res, next) => {
     next();
 };
 
-// Schema Validator Middleware
+
 module.exports.validateListing = (req, res, next) => {
-    let { error } = listingSchema.validate(req.body); // Validating data inside req.body using joi's schema.
+    let { error } = listingSchema.validate(req.body);
     if (error) {
-        throw new ExpressError(400, error.message); // If there is error, then throw it.
+        throw new ExpressError(400, error.message); 
     } else {
-        next(); // If there is no error, call next middleware.
+        next(); 
     }
 };
 
-// Schema Validator Middleware
+
 module.exports.validateReview = (req, res, next) => {
     let { error } = reviewSchema.validate(req.body);
     if (error) {
