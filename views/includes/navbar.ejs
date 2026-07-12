@@ -1,8 +1,6 @@
 <nav class="navbar navbar-expand-lg bg-white border-bottom sticky-top">
-
     <div class="container-fluid px-4">
 
-        
         <a class="navbar-brand logo" href="/listings">
             <div class="logo-badge">
                 <i class="fa-solid fa-mountain-city"></i>
@@ -15,10 +13,13 @@
             type="button"
             data-bs-toggle="collapse"
             data-bs-target="#navbarNav">
+
             <span class="navbar-toggler-icon"></span>
+
         </button>
 
         <div class="collapse navbar-collapse" id="navbarNav">
+
             <form
                 action="/listings"
                 method="GET"
@@ -34,30 +35,41 @@
                 <button
                     type="submit"
                     class="search-btn ms-2">
+
                     <i class="fa-solid fa-magnifying-glass"></i>
                     Search
+
                 </button>
+
             </form>
 
-            
             <div class="navbar-nav fw-bold ms-auto align-items-center">
+
                 <a class="nav-link me-2" href="/listings/new">
                     Add Your Home
                 </a>
+
                 <% if(!currentUser){ %>
+
                     <a class="nav-link" href="/login">
                         Login
                     </a>
+
                     <a class="nav-link" href="/signup">
                         Sign Up
                     </a>
+
                 <% } else { %>
+
                     <div class="profile-wrapper">
+
                         <button
                             id="profileBtn"
                             class="user-profile-btn"
                             type="button">
+
                             <% if(currentUser.avatar && currentUser.avatar.url){ %>
+
                                 <img
                                     src="<%= currentUser.avatar.url %>"
                                     class="navbar-profile-img"
@@ -79,36 +91,40 @@
 
                         </button>
 
-                       
-                        <div
-                            id="profileDropdown"
-                            class="profile-dropdown">
+                        <div id="profileDropdown" class="profile-dropdown">
 
-                          
+                            <!-- Header -->
+
                             <div class="dropdown-header">
 
-                               <% if(currentUser.avatar && currentUser.avatar.url){ %>
+                                <% if(currentUser.avatar && currentUser.avatar.url){ %>
 
-    <div class="avatar">
-        <img
-            src="<%= currentUser.avatar.url %>"
-            class="navbar-profile-img"
-            alt="<%= currentUser.username %>">
-    </div>
+                                    <div class="avatar">
 
-<% } else { %>
+                                        <img
+                                            src="<%= currentUser.avatar.url %>"
+                                            class="navbar-profile-img"
+                                            alt="<%= currentUser.username %>">
 
-    <div class="avatar">
-        <%= currentUser.username.charAt(0).toUpperCase() %>
-    </div>
+                                    </div>
 
-<% } %>
+                                <% } else { %>
+
+                                    <div class="avatar">
+                                        <%= currentUser.username.charAt(0).toUpperCase() %>
+                                    </div>
+
+                                <% } %>
 
                                 <div class="dropdown-user-info">
 
                                     <h5 class="dropdown-username">
-                                        <%= currentUser.username %>
+                                        Welcome Back 👋
                                     </h5>
+
+                                    <h4 class="dropdown-name">
+                                        <%= currentUser.username %>
+                                    </h4>
 
                                     <p class="dropdown-email">
                                         <i class="fa-solid fa-envelope"></i>
@@ -116,7 +132,7 @@
                                     </p>
 
                                     <span class="dropdown-badge">
-                                        HomeStay Member
+                                        Member Since <%= new Date(currentUser.createdAt).getFullYear() %>
                                     </span>
 
                                 </div>
@@ -125,27 +141,49 @@
 
                             <hr>
 
-                          
                             <a href="/profile">
                                 <i class="fa-solid fa-user"></i>
-                                My Profile
+                                <span>My Profile</span>
                             </a>
 
-                            
                             <a href="/profile#my-listings">
                                 <i class="fa-solid fa-list"></i>
-                                My Listings
+                                <span>My Listings</span>
                             </a>
 
                             <a href="/listings/new">
                                 <i class="fa-solid fa-house"></i>
-                                Add New Listing
+                                <span>Add New Listing</span>
                             </a>
 
-                            <a href="/bookings">
+                            <!-- ✅ FIXED -->
+
+                            <a href="/bookings/my-requests">
                                 <i class="fa-solid fa-calendar-check"></i>
-                                My Bookings
+                                <span>My Bookings</span>
                             </a>
+
+                            <% if(isHost){ %>
+
+                                <a
+                                    href="/bookings/host"
+                                    class="host-request-link">
+
+                                    <i class="fa-solid fa-inbox"></i>
+
+                                    <span>Host Requests</span>
+
+                                    <% if(hostPendingCount > 0){ %>
+
+                                        <span class="notification-badge">
+                                            <%= hostPendingCount %>
+                                        </span>
+
+                                    <% } %>
+
+                                </a>
+
+                            <% } %>
 
                             <hr>
 
@@ -155,7 +193,7 @@
 
                                 <i class="fa-solid fa-right-from-bracket"></i>
 
-                                Logout
+                                <span>Logout</span>
 
                             </a>
 

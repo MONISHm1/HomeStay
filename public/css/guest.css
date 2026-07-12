@@ -80,7 +80,7 @@
 }
 
 .filter-btn.active {
-    background: #ff385c;
+    background: #1A365D;
     color: white;
 }
 
@@ -95,7 +95,7 @@
 
 .empty-state i {
     font-size: 70px;
-    color: #ff385c;
+    color: #f7f9fb;
     margin-bottom: 20px;
 }
 
@@ -103,7 +103,7 @@
     display: inline-block;
     margin-top: 20px;
     padding: 12px 25px;
-    background: #ff385c;
+    background: #1A365D;
     color: white;
     border-radius: 12px;
     text-decoration: none;
@@ -250,7 +250,7 @@
     color: white;
     text-decoration: none;
     font-weight: 600;
-    background: #ff385c;
+    background: #1A365D;
     border-radius: 10px;
 }
 

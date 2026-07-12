@@ -1,19 +1,18 @@
 <% layout("layouts/boilerplate") %>
+
 <link rel="stylesheet" href="/css/guest.css">
+
 <div class="guest-dashboard">
 
+    <!-- Hero -->
     <section class="guest-hero">
         <div>
-            <h1>
-                Welcome back,
-                <%= currentUser.username %> 👋
-            </h1>
-            <p>
-                Manage all your stay requests from one place.
-            </p>
+            <h1>Welcome back, <%= currentUser.username %> 👋</h1>
+            <p>Manage all your stay requests from one place.</p>
         </div>
     </section>
 
+    <!-- Statistics -->
     <section class="stats-grid">
         <div class="stat-card active">
             <h2><%= bookingStats.all %></h2>
@@ -41,186 +40,146 @@
         </div>
     </section>
 
-
+    <!-- Filters -->
     <section class="booking-filters">
-        <button class="filter-btn active" data-filter="All">
-            All
-        </button>
-        <button class="filter-btn" data-filter="Pending">
-            Pending
-        </button>
-        <button class="filter-btn" data-filter="Accepted">
-            Accepted
-        </button>
-        <button class="filter-btn" data-filter="Rejected">
-            Rejected
-        </button>
-        <button class="filter-btn" data-filter="Cancelled">
-            Cancelled
-        </button>
+        <button class="filter-btn active" data-filter="All">All</button>
+        <button class="filter-btn" data-filter="Pending">Pending</button>
+        <button class="filter-btn" data-filter="Accepted">Accepted</button>
+        <button class="filter-btn" data-filter="Rejected">Rejected</button>
+        <button class="filter-btn" data-filter="Cancelled">Cancelled</button>
     </section>
 
+    <!-- Booking Grid -->
+    <section class="booking-grid">
 
-<section class="booking-grid">
+        <% if(bookings.length === 0){ %>
 
-    <% if(bookings.length===0){ %>
+            <div class="empty-state">
+                <i class="fa-solid fa-calendar-xmark"></i>
+                <h2>No Stay Requests Yet</h2>
+                <p>Your booking requests will appear here once you request a stay.</p>
 
-        <div class="empty-state">
+                <a href="/listings" class="explore-btn">
+                    <i class="fa-solid fa-compass"></i>
+                    Explore Homes
+                </a>
+            </div>
 
-            <i class="fa-solid fa-calendar-xmark"></i>
+        <% } else { %>
 
-            <h2>No Stay Requests Yet</h2>
+            <% bookings.forEach(booking => { 
+                const nights = Math.ceil(
+                    (new Date(booking.departureDate) - new Date(booking.arrivalDate)) /
+                    (1000 * 60 * 60 * 24)
+                );
+            %>
 
-            <p>
-                Once you request a stay, it will appear here.
-            </p>
+            <div class="booking-card" data-status="<%= booking.status %>">
 
-            <a
-                href="/listings"
-                class="explore-btn">
-
-                Explore Homes
-
-            </a>
-
-        </div>
-
-    <% } else { %>
-
-        <% bookings.forEach(booking=>{ %>
-
-            <div
-                class="booking-card"
-                data-status="<%= booking.status %>">
-
-                <!-- Property Image -->
-
+                <!-- Image -->
                 <img
                     src="<%= booking.listingImage %>"
-                    class="booking-image"
-                    alt="<%= booking.listingTitle %>">
-
-                <!-- Content -->
+                    alt="<%= booking.listingTitle %>"
+                    class="booking-image">
 
                 <div class="booking-content">
 
+                    <!-- Header -->
                     <div class="booking-top">
 
-                        <h3>
+                        <div>
+                            <h3><%= booking.listingTitle %></h3>
 
-                            <%= booking.listingTitle %>
-
-                        </h3>
+                            <% if(booking.bookingId){ %>
+                                <small class="booking-id">
+                                    Request #<%= booking.bookingId %>
+                                </small>
+                            <% } %>
+                        </div>
 
                         <span class="status <%= booking.status.toLowerCase() %>">
-
                             <%= booking.status %>
-
                         </span>
 
                     </div>
 
+                    <!-- Location -->
                     <p class="booking-location">
-
                         <i class="fa-solid fa-location-dot"></i>
-
-                        <%= booking.listingLocation %>,
-
-                        <%= booking.listingCountry %>
-
+                        <%= booking.listingLocation %>, <%= booking.listingCountry %>
                     </p>
 
+                    <!-- Info -->
                     <div class="booking-info-grid">
 
                         <div>
-
                             <span>Arrival</span>
-
-                            <strong>
-
-                                <%= new Date(booking.arrivalDate).toLocaleDateString() %>
-
-                            </strong>
-
+                            <strong><%= new Date(booking.arrivalDate).toLocaleDateString() %></strong>
                         </div>
 
                         <div>
-
                             <span>Departure</span>
-
-                            <strong>
-
-                                <%= new Date(booking.departureDate).toLocaleDateString() %>
-
-                            </strong>
-
+                            <strong><%= new Date(booking.departureDate).toLocaleDateString() %></strong>
                         </div>
 
                         <div>
-
                             <span>Guests</span>
-
-                            <strong>
-
-                                <%= booking.guests %>
-
-                            </strong>
-
+                            <strong><%= booking.guests %></strong>
                         </div>
 
                         <div>
-
                             <span>Purpose</span>
+                            <strong><%= booking.purpose %></strong>
+                        </div>
 
-                            <strong>
-
-                                <%= booking.purpose %>
-
-                            </strong>
-
+                        <div>
+                            <span>Duration</span>
+                            <strong><%= nights %> Night<%= nights > 1 ? "s" : "" %></strong>
                         </div>
 
                     </div>
 
+                    <!-- Message -->
                     <% if(booking.message){ %>
 
                         <div class="booking-message">
-
-                            <strong>
-
-                                Message
-
-                            </strong>
-
-                            <p>
-
-                                "<%= booking.message %>"
-
-                            </p>
-
+                            <strong>Message</strong>
+                            <p>"<%= booking.message %>"</p>
                         </div>
 
                     <% } %>
 
+                    <!-- Host Response -->
+                    <% if(booking.hostResponse){ %>
+
+                        <div class="booking-response">
+                            <strong>Host Response</strong>
+                            <p><%= booking.hostResponse %></p>
+                        </div>
+
+                    <% } %>
+
+                    <!-- Actions -->
                     <div class="booking-actions">
 
                         <a
                             href="/bookings/<%= booking._id %>"
                             class="view-btn">
-
+                            <i class="fa-solid fa-eye"></i>
                             View Details
-
                         </a>
 
-                        <% if(booking.status==="Pending"){ %>
+                        <% if(booking.status === "Pending"){ %>
 
                             <form
                                 action="/bookings/<%= booking._id %>/cancel?_method=PATCH"
                                 method="POST">
 
                                 <button
+                                    type="submit"
                                     class="cancel-btn">
 
+                                    <i class="fa-solid fa-xmark"></i>
                                     Cancel Request
 
                                 </button>
@@ -235,11 +194,12 @@
 
             </div>
 
-        <% }) %>
+            <% }) %>
 
-    <% } %>
+        <% } %>
 
-</section>
+    </section>
+
 </div>
 
 <script src="/js/guest.js"></script>

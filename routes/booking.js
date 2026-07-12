@@ -67,4 +67,12 @@ router.patch(
     wrapAsync(bookingController.cancelBooking)
 );
 
+
+router.patch(
+"/:id/complete",
+isLoggedIn,
+isBookingHost,
+wrapAsync(bookingController.completeBooking)
+);
+
 module.exports = router;

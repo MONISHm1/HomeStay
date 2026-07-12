@@ -48,30 +48,34 @@ document.querySelectorAll(".wishlist-icon").forEach((icon) => {
 });
 
 
-const profileBtn = document.getElementById("profileBtn");
 
+
+
+const profileBtn = document.getElementById("profileBtn");
 const profileDropdown = document.getElementById("profileDropdown");
 
-if(profileBtn){
-
-    profileBtn.addEventListener("click",(e)=>{
-
+if (profileBtn && profileDropdown) {
+    profileBtn.addEventListener("click", function (e) {
+        e.preventDefault();
         e.stopPropagation();
-
-        profileDropdown.classList.toggle("active");
-
+        profileDropdown.classList.toggle("show");
+        profileBtn.classList.toggle("active");
     });
 
-    document.addEventListener("click",()=>{
-
-        profileDropdown.classList.remove("active");
-
+    profileDropdown.addEventListener("click", function (e) {
+        e.stopPropagation();
     });
 
-    profileDropdown.addEventListener("click",(e)=>{
+    document.addEventListener("click", function () {
+        profileDropdown.classList.remove("show");
+        profileBtn.classList.remove("active");
+    });
 
-        e.stopPropagation();
-
+    document.addEventListener("keydown", function (e) {
+        if (e.key === "Escape") {
+            profileDropdown.classList.remove("show");
+            profileBtn.classList.remove("active");
+        }
     });
 
 }

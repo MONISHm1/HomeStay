@@ -16,9 +16,9 @@
     background:
     linear-gradient(
         135deg,
-        #ff385c 0%,
-        #ff6b6b 45%,
-        #ff9f43 100%
+        #101827 0%,
+        #1A365D 45%,
+        #001400 100%
     );
 
     border-bottom-left-radius:40px;
@@ -34,7 +34,7 @@
     width:260px;
     height:260px;
     border-radius:50%;
-    background:rgba(255,255,255,.15);
+    background: #1A365D;
     top:-70px;
     left:-80px;
 }
@@ -94,7 +94,7 @@
     font-size:62px;
     font-weight:700;
     color:white;
-    background:linear-gradient(135deg,#ff385c,#ff8c42);
+    background:#1A365D;
     border:6px solid white;
     box-shadow:0 12px 35px rgba(0,0,0,.18);
 }
@@ -113,7 +113,7 @@
 }
 
 .profile-email i {
-    color: #ff385c;
+    color: #1A365D;
     margin-right: 6px;
 }
 
@@ -135,8 +135,8 @@
     display: inline-flex;
     align-items: center;
     gap: 8px;
-    background: #fff4f6;
-    color: #ff385c;
+    background: #1A365D;
+    color:  #fff4f6;
     padding: 10px 20px;
     border-radius: 30px;
     font-weight: 600;
@@ -174,7 +174,7 @@
     width: 65px;
     height: 65px;
     border-radius: 18px;
-    background: linear-gradient(135deg, #ff385c, #ff7b72);
+    background: #1A365D;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -224,7 +224,7 @@
     left:0;
     width:100%;
     height:6px;
-    background:linear-gradient(90deg,#ff385c,#ff9f43);
+    background:#1A365D;
 }
 
 .stat-box:hover{
@@ -234,7 +234,7 @@
 
 .stat-box h2{
     font-size:2.4rem;
-    color:#ff385c;
+    color:  #1A365D;
     margin-bottom:10px;
     font-weight:700;
 }
@@ -253,7 +253,7 @@
 }
 
 .profile-btn{
-    background:linear-gradient(135deg,#ff385c,#ff6b6b);
+    background:#1A365D;
     color:white;
     text-decoration:none;
     padding:16px 36px;
@@ -263,14 +263,14 @@
     display:inline-flex;
     align-items:center;
     gap:10px;
-    box-shadow:0 12px 30px rgba(255,56,92,.35);
+    box-shadow:0 12px 30px #001400;
     transition:.35s;
 }
 
 .profile-btn:hover{
     color:white;
     transform:translateY(-4px);
-    box-shadow:0 18px 40px rgba(255,56,92,.45);
+    box-shadow:0 18px 40px #001400;
 }
 
 .profile-btn i{
@@ -304,8 +304,8 @@
 }
 
 .listing-count{
-    background:#fff;
-    color:#ff385c;
+    background:#1A365D;
+    color: #fff;
     font-weight:700;
     padding:12px 22px;
     border-radius:30px;
@@ -374,7 +374,7 @@
 .listing-price{
     font-size:1.4rem;
     font-weight:700;
-    color:#ff385c;
+    color:#1A365D;
     margin-bottom:22px;
 }
 
@@ -411,14 +411,14 @@
 }
 
 .edit-btn{
-    background:linear-gradient(135deg,#ff385c,#ff7b72);
+    background:#1A365D;
     color:white;
 }
 
 .edit-btn:hover{
     color:white;
     transform:translateY(-2px);
-    box-shadow:0 10px 20px rgba(255,56,92,.30);
+    box-shadow:0 10px 20px #001400;
 }
 
 .empty-listings{
@@ -431,7 +431,7 @@
 
 .empty-listings i{
     font-size:5rem;
-    color:#ff385c;
+    color:#1A365D;
     margin-bottom:25px;
 }
 
@@ -447,7 +447,7 @@
 
 .add-listing-btn{
     display:inline-block;
-    background:linear-gradient(135deg,#ff385c,#ff7b72);
+    background:#1A365D;
     color:white;
     text-decoration:none;
     padding:14px 28px;

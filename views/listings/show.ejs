@@ -607,22 +607,37 @@
     margin-bottom: 1rem;
 }
 
-.show-reserve-btn {
+ .show-reserve-btn{
     width: 100%;
-    padding: 0.9rem;
-    background: #1A365D;
-    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 15px;
+    padding: 16px 20px;
+    background: linear-gradient(135deg,#1f4a8a,#0f2d63);
+    color: #fff;
     border: none;
-    border-radius: 12px;
+    border-radius: 14px;
     font-size: 1rem;
-    font-weight: 700;
+    font-weight: 600;
+    text-decoration: none;
     cursor: pointer;
-    transition: background 0.2s;
+    transition: all .3s ease;
 }
 
-.show-reserve-btn:hover {
-    background: #001400;
+.show-reserve-btn:hover{
+    background: linear-gradient(135deg,#2958a4,#163a78);
+    color:white;
+    transform: translateY(-2px);
+    text-decoration:none;
+    box-shadow:0 8px 18px rgba(0,0,0,.18);
+
 }
+
+.show-reserve-btn i{
+    font-size:16px;
+}
+
 
 .show-reserve-note {
     text-align: center;

@@ -23,6 +23,8 @@ const passport = require("passport");
 const LocalStrategy = require("passport-local");
 const User = require("./models/user.js");
 const bookingRouter = require("./routes/booking");
+const Booking=require("./models/booking");
+const Listing=require("./models/listing");
 
 
 // Requiring Express Router files.
@@ -93,10 +95,30 @@ passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
 // Flsh Message Middleware.
-app.use((req, res, next) => {
+app.use(async (req, res, next) => {
     res.locals.success = req.flash("success");
     res.locals.error = req.flash("error");
-    res.locals.currentUser = req.user; 
+    res.locals.currentUser = req.user;
+    res.locals.hostPendingCount = 0;
+    res.locals.isHost = false;
+
+    if (req.user) {
+        const listings = await Listing.find({
+            owner: req.user._id,
+        }).select("_id");
+
+        if (listings.length > 0) {
+            res.locals.isHost = true;
+
+            const listingIds = listings.map((listing) => listing._id);
+
+            res.locals.hostPendingCount = await Booking.countDocuments({
+                listing: { $in: listingIds },
+                status: "Pending",
+            });
+        }
+    }
+
     next();
 });
 

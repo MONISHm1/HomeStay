@@ -6,13 +6,13 @@
 
     <div class="host-header">
         <h1>Incoming Stay Requests</h1>
-        <p>Review and manage requests for your properties.</p>
+        <p>Review and manage stay requests for your properties.</p>
     </div>
 
     <div class="host-stats">
         <div class="host-stat">
             <h2><%= stats.total %></h2>
-            <span>Total</span>
+            <span>Total Requests</span>
         </div>
 
         <div class="host-stat">
@@ -36,117 +36,206 @@
         <div class="empty-host">
             <i class="fa-solid fa-house-circle-check"></i>
             <h2>No Stay Requests</h2>
-            <p>Requests from guests will appear here.</p>
+            <p>Stay requests from guests will appear here.</p>
+        </div>
+
+    <% } else { %>
+
+        <div class="host-grid">
+
+            <% bookings.forEach(booking => { %>
+
+                <div class="host-card">
+
+                    <img
+                        src="<%= booking.listingImage %>"
+                        alt="<%= booking.listingTitle %>">
+
+                    <div class="host-content">
+
+                        <div class="booking-top">
+
+                            <div>
+                                <h3><%= booking.listingTitle %></h3>
+
+                                <small class="booking-id">
+                                    Booking ID :
+                                    <strong><%= booking.bookingId || booking._id.toString().slice(-6).toUpperCase() %></strong>
+                                </small>
+                            </div>
+
+                            <span class="status <%= booking.status.toLowerCase() %>">
+                                <%= booking.status %>
+                            </span>
+
+                        </div>
+
+                        <p class="listing-location">
+                            <i class="fa-solid fa-location-dot"></i>
+                            <%= booking.listingLocation %>, <%= booking.listingCountry %>
+                        </p>
+
+                        <hr>
+
+                        <div class="booking-info-grid">
+
+                            <div>
+                                <small>Guest</small>
+                                <strong><%= booking.guest.username %></strong>
+                            </div>
+
+                            <div>
+                                <small>Email</small>
+                                <strong><%= booking.guest.email %></strong>
+                            </div>
+
+                            <div>
+                                <small>Guests</small>
+                                <strong><%= booking.guests %></strong>
+                            </div>
+
+                            <div>
+                                <small>Purpose</small>
+                                <strong><%= booking.purpose %></strong>
+                            </div>
+
+                            <div>
+                                <small>Arrival</small>
+                                <strong>
+                                    <%= new Date(booking.arrivalDate).toLocaleDateString("en-IN") %>
+                                </strong>
+                            </div>
+
+                            <div>
+                                <small>Departure</small>
+                                <strong>
+                                    <%= new Date(booking.departureDate).toLocaleDateString("en-IN") %>
+                                </strong>
+                            </div>
+
+                            <div>
+                                <small>Requested On</small>
+                                <strong>
+                                    <%= new Date(booking.createdAt).toLocaleDateString("en-IN") %>
+                                </strong>
+                            </div>
+
+                            <div>
+                                <small>Status</small>
+                                <strong><%= booking.status %></strong>
+                            </div>
+
+                        </div>
+
+                        <div class="host-buttons">
+
+                            <a
+                                href="/bookings/<%= booking._id %>"
+                                class="details-btn">
+                                <i class="fa-solid fa-eye"></i>
+                                View Details
+                            </a>
+
+                            <% if (booking.status === "Accepted") { %>
+
+                                <form
+                                    action="/bookings/<%= booking._id %>/complete?_method=PATCH"
+                                    method="POST">
+
+                                    <button
+                                        type="submit"
+                                        class="complete-btn">
+
+                                        <i class="fa-solid fa-circle-check"></i>
+                                        Mark Completed
+
+                                    </button>
+
+                                </form>
+
+                            <% } %>
+
+                        </div>
+
+                        <% if (booking.status === "Pending") { %>
+
+                            <div class="host-response-box">
+
+                                <label class="response-label">
+                                    Response to Guest (Optional)
+                                </label>
+
+                                <form
+                                    action="/bookings/<%= booking._id %>/accept?_method=PATCH"
+                                    method="POST"
+                                    class="response-form">
+
+                                    <textarea
+                                        name="hostResponse"
+                                        rows="3"
+                                        class="response-textarea"
+                                        placeholder="Example: Looking forward to hosting you!"></textarea>
+
+                                    <button
+                                        type="submit"
+                                        class="accept-btn">
+
+                                        <i class="fa-solid fa-check"></i>
+                                        Accept Request
+
+                                    </button>
+
+                                </form>
+
+                                <form
+                                    action="/bookings/<%= booking._id %>/reject?_method=PATCH"
+                                    method="POST"
+                                    class="response-form">
+
+                                    <textarea
+                                        name="hostResponse"
+                                        rows="3"
+                                        class="response-textarea"
+                                        placeholder="Example: Sorry, the property is unavailable for these dates."></textarea>
+
+                                    <button
+                                        type="submit"
+                                        class="reject-btn">
+
+                                        <i class="fa-solid fa-xmark"></i>
+                                        Reject Request
+
+                                    </button>
+
+                                </form>
+
+                            </div>
+
+                        <% } else if (booking.hostResponse) { %>
+
+                            <div class="host-response-preview">
+
+                                <h5>
+                                    <i class="fa-solid fa-paper-plane"></i>
+                                    Response Sent
+                                </h5>
+
+                                <p>
+                                    "<%= booking.hostResponse %>"
+                                </p>
+
+                            </div>
+
+                        <% } %>
+
+                    </div>
+
+                </div>
+
+            <% }) %>
+
         </div>
 
     <% } %>
-
-    <div class="host-grid">
-
-        <% bookings.forEach(booking => { %>
-
-            <div class="host-card">
-
-                <img src="<%= booking.listingImage %>" alt="<%= booking.listingTitle %>">
-
-                <div class="host-content">
-
-                    <h3><%= booking.listingTitle %></h3>
-
-                    <p>
-                        <i class="fa-solid fa-location-dot"></i>
-                        <%= booking.listingLocation %>, <%= booking.listingCountry %>
-                    </p>
-
-                    <hr>
-
-                    <p>
-                        <strong>Guest:</strong>
-                        <%= booking.guest.username %>
-                    </p>
-
-                    <p>
-                        <strong>Email:</strong>
-                        <%= booking.guest.email %>
-                    </p>
-
-                    <p>
-                        <strong>Purpose:</strong>
-                        <%= booking.purpose %>
-                    </p>
-
-                    <p>
-                        <strong>Guests:</strong>
-                        <%= booking.guests %>
-                    </p>
-
-                    <p>
-                        <strong>Status:</strong>
-                        <span class="status <%= booking.status.toLowerCase() %>">
-                            <%= booking.status %>
-                        </span>
-                    </p>
-
-                    <div class="host-buttons">
-
-                        <a href="/bookings/<%= booking._id %>" class="details-btn">
-                            View
-                        </a>
-
-                       <% if(booking.status==="Pending"){ %>
-
-<div class="host-response-box">
-
-    <label>
-
-        Response to Guest
-
-    </label>
-
-    <!-- ACCEPT -->
-
-    <form
-        action="/bookings/<%= booking._id %>/accept?_method=PATCH"
-        method="POST">
-
-        <textarea
-            name="hostResponse"
-            rows="3"
-            class="response-textarea"
-            placeholder="Example: Looking forward to hosting you!"></textarea>
-
-        <button class="accept-btn">
-
-            Accept Request
-
-        </button>
-
-    </form>
-
-    <!-- REJECT -->
-
-    <form
-        action="/bookings/<%= booking._id %>/reject?_method=PATCH"
-        method="POST">
-
-        <textarea
-            name="hostResponse"
-            rows="3"
-            class="response-textarea"
-            placeholder="Example: Sorry, the property is unavailable on these dates."></textarea>
-
-        <button class="reject-btn">
-
-            Reject Request
-
-        </button>
-
-    </form>
-
-</div>
-
-<% } %>
-
-    </div>
 
 </div>

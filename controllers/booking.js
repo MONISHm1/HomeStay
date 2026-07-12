@@ -1,5 +1,6 @@
 const Booking = require("../models/booking");
 const Listing = require("../models/listing");
+const { hasDateConflict } = require("../utils/bookingUtils");
 
 // Show Stay Request Form
 module.exports.showRequestForm = async (req, res) => {
@@ -78,42 +79,42 @@ module.exports.guestDashboard = async (req, res) => {
     })
         .populate("host", "username email")
         .sort({ createdAt: -1 });
+
+    const countByStatus = (status) =>
+        bookings.filter((booking) => booking.status === status).length;
+
     const bookingStats = {
-        total: bookings.length,
-        pending: bookings.filter(
-            booking => booking.status === "Pending"
-        ).length,
-        accepted: bookings.filter(
-            booking => booking.status === "Accepted"
-        ).length,
-        rejected: bookings.filter(
-            booking => booking.status === "Rejected"
-        ).length,
-        cancelled: bookings.filter(
-            booking => booking.status === "Cancelled"
-        ).length,
-        completed: bookings.filter(
-            booking => booking.status === "Completed"
-        ).length,
+        all: bookings.length,
+        pending: countByStatus("Pending"),
+        accepted: countByStatus("Accepted"),
+        rejected: countByStatus("Rejected"),
+        cancelled: countByStatus("Cancelled"),
+        completed: countByStatus("Completed"),
     };
 
-    // Active Stay Requests
-    const activeBookings = bookings.filter(
-        booking =>
+    const upcoming = bookings.filter(
+        (booking) =>
             booking.status === "Pending" ||
             booking.status === "Accepted"
-    ).length;
+    );
 
-    // Recent Activity
-    const recentBookings = bookings.slice(0, 5);
+    const completed = bookings.filter(
+        (booking) => booking.status === "Completed"
+    );
+
+    const cancelled = bookings.filter(
+        (booking) =>
+            booking.status === "Cancelled" ||
+            booking.status === "Rejected"
+    );
 
     res.render("bookings/guest", {
         bookings,
         bookingStats,
-        activeBookings,
-        recentBookings,
+        upcoming,
+        completed,
+        cancelled,
     });
-
 };
 
 // Host Dashboard
@@ -185,32 +186,53 @@ module.exports.showBooking = async (req, res) => {
 
 // Accept Stay Request
 module.exports.acceptBooking = async (req, res) => {
+
     const booking = await Booking.findById(req.params.id);
 
     if (!booking) {
-        req.flash("error", "Request not found.");
+        req.flash("error", "Booking not found.");
         return res.redirect("/bookings/host");
     }
 
+    const conflict = await hasDateConflict(
+        booking.listing,
+        booking.arrivalDate,
+        booking.departureDate,
+        booking._id
+    );
+
+    if (conflict) {
+        req.flash(
+            "error",
+            "Another confirmed booking already exists for these dates."
+        );
+        return res.redirect("/bookings/host");
+    }
     booking.status = "Accepted";
+    booking.respondedAt = new Date();
+     booking.hostResponse = req.body.hostResponse || "";
     await booking.save();
 
-    req.flash("success", "Stay request accepted.");
+    req.flash(
+        "success",
+        "Stay request accepted."
+    );
     res.redirect("/bookings/host");
+
 };
 
 // Reject Stay Request
 module.exports.rejectBooking = async (req, res) => {
     const booking = await Booking.findById(req.params.id);
-
     if (!booking) {
         req.flash("error", "Request not found.");
         return res.redirect("/bookings/host");
     }
-
     booking.status = "Rejected";
+    // Save the date & time when the host responded
+    booking.respondedAt = new Date();
+    booking.hostResponse = req.body.hostResponse || "";
     await booking.save();
-
     req.flash("success", "Stay request rejected.");
     res.redirect("/bookings/host");
 };
@@ -218,15 +240,30 @@ module.exports.rejectBooking = async (req, res) => {
 // Cancel Stay Request
 module.exports.cancelBooking = async (req, res) => {
     const booking = await Booking.findById(req.params.id);
-
     if (!booking) {
         req.flash("error", "Request not found.");
         return res.redirect("/bookings/my-requests");
     }
-
     booking.status = "Cancelled";
+    // Store cancellation time
+    booking.cancelledAt = new Date();
     await booking.save();
-
     req.flash("success", "Stay request cancelled.");
     res.redirect("/bookings/my-requests");
 };
+
+module.exports.completeBooking = async (req,res)=>{
+const booking=await Booking.findById(req.params.id);
+if(!booking){
+req.flash("error","Booking not found.");
+
+return res.redirect("/bookings/host");
+}
+booking.status="Completed";
+await booking.save();
+req.flash(
+"success",
+"Booking marked as completed."
+);
+res.redirect("/bookings/host");
+}
