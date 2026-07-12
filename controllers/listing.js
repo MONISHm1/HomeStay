@@ -2,8 +2,6 @@ const Listing = require("../models/listing.js");
 const { geocodeLocation } = require("../utils/geocode");
 
 
-
-// Index Route Callback to see all Listings.
 module.exports.index = async (req, res) => {
     const { category, search } = req.query;
 
@@ -33,17 +31,10 @@ module.exports.index = async (req, res) => {
     });
 };
 
-
-
-
-// New Form to Create new Listings.
 module.exports.newListingForm = (req, res) => {
   res.render("../views/listings/new.ejs");
 };
 
-
-
-// Show Listing Details.
 module.exports.showListingDetails = async (req, res) => {
   const { id } = req.params;
   const listing = await Listing.findById(id)
@@ -59,9 +50,6 @@ module.exports.showListingDetails = async (req, res) => {
 };
 
 
-
-
-// Create and Save new Listing in DB.
 module.exports.saveNewListing = async (req, res, next) => {
   console.log("FILE:", req.file);
   try {
@@ -105,9 +93,6 @@ module.exports.saveNewListing = async (req, res, next) => {
 };
 
 
-
-
-// New Form to Edit Listing.
 module.exports.editListingForm = async (req, res) => {
   const { id } = req.params;
   const listing = await Listing.findById(id);
@@ -126,9 +111,6 @@ module.exports.editListingForm = async (req, res) => {
 };
 
 
-
-
-// Update Edited Listing data in DB.
 module.exports.updateListing = async (req, res) => {
   const { id } = req.params;
   let listing = await Listing.findByIdAndUpdate(id, { ...req.body.listing });
@@ -143,9 +125,6 @@ module.exports.updateListing = async (req, res) => {
   res.redirect(`/listings/${id}`);
 };
 
-
-
-// Delete Lising.
 module.exports.deleteListing = async (req, res) => {
   const { id } = req.params;
   await Listing.findByIdAndDelete(id);
